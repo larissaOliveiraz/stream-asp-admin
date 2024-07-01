@@ -1,0 +1,30 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lm.Streamthis.Catalog.UnitTests", "tests\Lm.Streamthis.Catalog.UnitTests\Lm.Streamthis.Catalog.UnitTests.csproj", "{D4DFC204-B1D5-4BD4-936C-0BE3053406A1}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{8027D18E-07A2-4141-8E20-4D6142533341}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{56FBAB2F-F176-4302-8E87-881A0E2588D6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lm.Streamthis.Catalog.Domain", "src\Lm.Streamthis.Catalog.Domain\Lm.Streamthis.Catalog.Domain.csproj", "{663A2756-516F-4582-9BDC-FE65849B6604}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D4DFC204-B1D5-4BD4-936C-0BE3053406A1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D4DFC204-B1D5-4BD4-936C-0BE3053406A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D4DFC204-B1D5-4BD4-936C-0BE3053406A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D4DFC204-B1D5-4BD4-936C-0BE3053406A1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{663A2756-516F-4582-9BDC-FE65849B6604}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{663A2756-516F-4582-9BDC-FE65849B6604}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{663A2756-516F-4582-9BDC-FE65849B6604}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{663A2756-516F-4582-9BDC-FE65849B6604}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{D4DFC204-B1D5-4BD4-936C-0BE3053406A1} = {8027D18E-07A2-4141-8E20-4D6142533341}
+		{663A2756-516F-4582-9BDC-FE65849B6604} = {56FBAB2F-F176-4302-8E87-881A0E2588D6}
+	EndGlobalSection
+EndGlobal
