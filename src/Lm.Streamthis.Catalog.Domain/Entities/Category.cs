@@ -11,12 +11,12 @@ public class Category
         Description = description;
         IsActive = isActive;
         CreatedAt = DateTime.Now;
-        
+
         Validate();
     }
 
     public Guid Id { get; private set; }
-    public string Name { get; private set; }    
+    public string Name { get; private set; }
     public string Description { get; private set; }
     public bool IsActive { get; private set; }
     public DateTime CreatedAt { get; private set; }
@@ -25,5 +25,22 @@ public class Category
     {
         if (string.IsNullOrWhiteSpace(Name))
             throw new EntityValidationException($"{nameof(Name)} should not be null or empty.");
+        if (Description == null)
+            throw new EntityValidationException($"{nameof(Description)} should not be null.");
+        switch (Name.Length)
+        {
+            case < 3:
+                throw new EntityValidationException(
+                    $"{nameof(Name)} should be at least three characters long."
+                );
+            case > 255:
+                throw new EntityValidationException(
+                    $"{nameof(Name)} should be equal or less than 255 characters long.");
+        }
+
+        if (Description.Length > 10000)
+            throw new EntityValidationException(
+                $"{nameof(Description)} should be equal or less than 10.000 characters long."
+            );
     }
 }

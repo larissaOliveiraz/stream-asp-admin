@@ -62,24 +62,63 @@ public class CategoryTests
     [InlineData("   ")]
     public void Should_Throw_Error_When_Name_IsEmpty(string? name)
     {
-        Action action = () => 
-            new DomainEntities.Category(name!, "category description");
-
-        var exception = Assert.Throws<EntityValidationException>(action);
+        var exception = Assert.Throws<EntityValidationException>(Action);
         Assert.Equal("Name should not be null or empty.", exception.Message);
+        return;
+
+        void Action() => 
+            new DomainEntities.Category(name!, "category description");
     }
     
-    [Theory(DisplayName = nameof(Should_Throw_Error_When_Description_IsEmpty))]
+    [Fact(DisplayName = nameof(Should_Throw_Error_When_Description_IsNull))]
     [Trait("Domain", "Category")]
-    [InlineData(null)]
-    [InlineData("")]
-    [InlineData("   ")]
-    public void Should_Throw_Error_When_Description_IsEmpty(string? name)
+    public void Should_Throw_Error_When_Description_IsNull()
     {
-        Action action = () => 
-            new DomainEntities.Category(name!, "category description");
+        var exception = Assert.Throws<EntityValidationException>(Action);
+        Assert.Equal("Description should not be null.", exception.Message);
+        return;
 
-        var exception = Assert.Throws<EntityValidationException>(action);
-        Assert.Equal("Name should not be null or empty.", exception.Message);
+        void Action() => 
+            new DomainEntities.Category("category name", null!);
+    }
+
+    [Fact(DisplayName = nameof(Should_Throw_Error_When_Name_Has_Less_Than_3_Characters))]
+    [Trait("Domain", "Category")]
+    public void Should_Throw_Error_When_Name_Has_Less_Than_3_Characters()
+    {
+        var exception = Assert.Throws<EntityValidationException>(Action);
+        Assert.Equal("Name should be at least three characters long.", exception.Message);
+        return;
+        
+        void Action() => 
+            new DomainEntities.Category("ca", "category description");
+    }
+
+    [Fact(DisplayName = nameof(Should_Throw_Error_When_Name_Has_More_Than_255_Characters))]
+    [Trait("Domain", "Category")]
+    public void Should_Throw_Error_When_Name_Has_More_Than_255_Characters()
+    {
+        var invalidName = string.Join("", Enumerable.Range(0, 256).Select(_ => "a").ToArray());
+        
+        var exception = Assert.Throws<EntityValidationException>(Action);
+        Assert.Equal("Name should be equal or less than 255 characters long.", exception.Message);
+        return;
+
+        void Action() => 
+            new DomainEntities.Category(invalidName, "category description");
+    }
+
+    [Fact(DisplayName = nameof(Should_Throw_Error_When_Description_Has_More_Than_10000_Characters))]
+    [Trait("Domain", "Category")]
+    public void Should_Throw_Error_When_Description_Has_More_Than_10000_Characters()
+    {
+        var invalidDescription = string.Join(null, Enumerable.Range(0, 10001).Select(_ => "a").ToArray());
+
+        var exception = Assert.Throws<EntityValidationException>(Action);
+        Assert.Equal("Description should be equal or less than 10.000 characters long.", exception.Message);
+        return;
+        
+        void Action() => 
+            new DomainEntities.Category("category name", invalidDescription);
     }
 }
