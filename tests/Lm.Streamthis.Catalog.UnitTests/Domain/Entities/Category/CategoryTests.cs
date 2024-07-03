@@ -155,4 +155,30 @@ public class CategoryTests
         
         Assert.False(category.IsActive);
     }
+
+    [Fact(DisplayName = nameof(Should_Update_Name_And_Description))]
+    [Trait("Domain", "Category")]
+    public void Should_Update_Name_And_Description()
+    {
+        var category = new DomainEntities.Category("category name", "category description");
+        var newCategory = new { Name = "new name", Description = "new description" };
+
+        category.Update(newCategory.Name, newCategory.Description);
+        
+        Assert.Equal(category.Name, newCategory.Name);
+        Assert.Equal(category.Description, newCategory.Description);
+    }
+    
+    [Fact(DisplayName = nameof(Should_Update_Name))]
+    [Trait("Domain", "Category")]
+    public void Should_Update_Name()
+    {
+        var category = new DomainEntities.Category("category name", "category description");
+        var newCategory = new { Name = "new name" };
+
+        category.Update(newCategory.Name);
+        
+        Assert.Equal(category.Name, newCategory.Name);
+        Assert.Equal("category description", category.Description);
+    }
 }
