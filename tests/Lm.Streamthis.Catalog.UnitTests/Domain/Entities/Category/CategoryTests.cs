@@ -121,4 +121,38 @@ public class CategoryTests
         void Action() => 
             new DomainEntities.Category("category name", invalidDescription);
     }
+    
+    [Fact(DisplayName = nameof(Should_Activate))]
+    [Trait("Domain", "Category")]
+    public void Should_Activate()
+    {
+        var validData = new
+        {
+            Name = "category name",
+            Description = "category description"
+        };
+
+        var category = new DomainEntities.Category(validData.Name, validData.Description, false);
+
+        category.Activate();
+        
+        Assert.True(category.IsActive);
+    }
+    
+    [Fact(DisplayName = nameof(Should_Deactivate))]
+    [Trait("Domain", "Category")]
+    public void Should_Deactivate()
+    {
+        var validData = new
+        {
+            Name = "category name",
+            Description = "category description"
+        };
+
+        var category = new DomainEntities.Category(validData.Name, validData.Description);
+
+        category.Deactivate();
+        
+        Assert.False(category.IsActive);
+    }
 }

@@ -21,6 +21,18 @@ public class Category
     public bool IsActive { get; private set; }
     public DateTime CreatedAt { get; private set; }
 
+    public void Activate()
+    {
+        IsActive = true;
+        Validate();
+    }
+
+    public void Deactivate()
+    {
+        IsActive = false;
+        Validate();
+    }
+
     private void Validate()
     {
         if (string.IsNullOrWhiteSpace(Name))
@@ -30,17 +42,11 @@ public class Category
         switch (Name.Length)
         {
             case < 3:
-                throw new EntityValidationException(
-                    $"{nameof(Name)} should be at least three characters long."
-                );
+                throw new EntityValidationException($"{nameof(Name)} should be at least three characters long.");
             case > 255:
-                throw new EntityValidationException(
-                    $"{nameof(Name)} should be equal or less than 255 characters long.");
+                throw new EntityValidationException($"{nameof(Name)} should be equal or less than 255 characters long.");
         }
-
         if (Description.Length > 10000)
-            throw new EntityValidationException(
-                $"{nameof(Description)} should be equal or less than 10.000 characters long."
-            );
+            throw new EntityValidationException($"{nameof(Description)} should be equal or less than 10.000 characters long.");
     }
 }
