@@ -1,8 +1,9 @@
 ﻿using Lm.Streamthis.Catalog.Domain.Exceptions;
+using Lm.Streamthis.Catalog.Domain.SeedWork;
 
 namespace Lm.Streamthis.Catalog.Domain.Entities;
 
-public class Category
+public class Category : AggregateRoot
 {
     public Category(string name, string description, bool isActive = true)
     {
@@ -15,7 +16,6 @@ public class Category
         Validate();
     }
 
-    public Guid Id { get; private set; }
     public string Name { get; private set; }
     public string Description { get; private set; }
     public bool IsActive { get; private set; }
