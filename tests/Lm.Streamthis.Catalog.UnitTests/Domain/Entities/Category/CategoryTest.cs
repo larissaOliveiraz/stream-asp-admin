@@ -157,7 +157,7 @@ public class CategoryTest(CategoryTestFixture categoryTestFixture)
     public void Should_Update_Name_And_Description()
     {
         var category = categoryTestFixture.GetValidCategory();
-        var newCategory = new { Name = "new name", Description = "new description" };
+        var newCategory = categoryTestFixture.GetValidCategory();
 
         category.Update(newCategory.Name, newCategory.Description);
         
@@ -170,11 +170,12 @@ public class CategoryTest(CategoryTestFixture categoryTestFixture)
     public void Should_Update_Name()
     {
         var category = categoryTestFixture.GetValidCategory();
-        var newCategory = new { Name = "new name" };
+        var newName = categoryTestFixture.GetValidCategoryName();
+        var currentDescription = category.Description;
 
-        category.Update(newCategory.Name);
+        category.Update(newName);
         
-        category.Name.Should().Be(newCategory.Name);
-        category.Description.Should().Be("category description");
+        category.Name.Should().Be(newName);
+        category.Description.Should().Be(currentDescription);
     }
 }
