@@ -91,7 +91,7 @@ public class CategoryTest(CategoryTestFixture categoryTestFixture)
 
         action.Should()
             .Throw<EntityValidationException>()
-            .WithMessage("Name should be at least three characters long.");
+            .WithMessage("Name should not have less than 3 characters.");
     }
 
     [Fact(DisplayName = nameof(Should_Throw_Error_When_Name_Has_More_Than_255_Characters))]
@@ -106,7 +106,7 @@ public class CategoryTest(CategoryTestFixture categoryTestFixture)
 
         action.Should()
             .Throw<EntityValidationException>()
-            .WithMessage("Name should be equal or less than 255 characters long.");
+            .WithMessage("Name should not have more than 255 characters.");
     }
 
     [Fact(DisplayName = nameof(Should_Throw_Error_When_Description_Has_More_Than_10000_Characters))]
@@ -121,7 +121,7 @@ public class CategoryTest(CategoryTestFixture categoryTestFixture)
 
         action.Should()
             .Throw<EntityValidationException>()
-            .WithMessage("Description should be equal or less than 10.000 characters long.");
+            .WithMessage("Description should not have more than 10.000 characters.");
     }
     
     [Fact(DisplayName = nameof(Should_Activate))]

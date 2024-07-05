@@ -49,11 +49,11 @@ public class Category : AggregateRoot
         switch (Name.Length)
         {
             case < 3:
-                throw new EntityValidationException($"{nameof(Name)} should be at least three characters long.");
+                throw new EntityValidationException($"{nameof(Name)} should not have less than 3 characters.");
             case > 255:
-                throw new EntityValidationException($"{nameof(Name)} should be equal or less than 255 characters long.");
+                throw new EntityValidationException($"{nameof(Name)} should not have more than 255 characters.");
         }
         if (Description.Length > 10000)
-            throw new EntityValidationException($"{nameof(Description)} should be equal or less than 10.000 characters long.");
+            throw new EntityValidationException($"{nameof(Description)} should not have more than 10.000 characters.");
     }
 }
