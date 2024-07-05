@@ -121,7 +121,7 @@ public class CategoryTest(CategoryTestFixture categoryTestFixture)
 
         action.Should()
             .Throw<EntityValidationException>()
-            .WithMessage("Description should not have more than 10.000 characters.");
+            .WithMessage("Description should not have more than 10000 characters.");
     }
     
     [Fact(DisplayName = nameof(Should_Activate))]

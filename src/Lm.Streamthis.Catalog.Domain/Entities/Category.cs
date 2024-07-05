@@ -1,5 +1,6 @@
 ﻿using Lm.Streamthis.Catalog.Domain.Exceptions;
 using Lm.Streamthis.Catalog.Domain.SeedWork;
+using Lm.Streamthis.Catalog.Domain.Validation;
 
 namespace Lm.Streamthis.Catalog.Domain.Entities;
 
@@ -12,7 +13,6 @@ public class Category : AggregateRoot
         Description = description;
         IsActive = isActive;
         CreatedAt = DateTime.Now;
-
         Validate();
     }
 
@@ -42,18 +42,10 @@ public class Category : AggregateRoot
 
     private void Validate()
     {
-        if (string.IsNullOrWhiteSpace(Name))
-            throw new EntityValidationException($"{nameof(Name)} should not be null or empty.");
-        if (Description == null)
-            throw new EntityValidationException($"{nameof(Description)} should not be null.");
-        switch (Name.Length)
-        {
-            case < 3:
-                throw new EntityValidationException($"{nameof(Name)} should not have less than 3 characters.");
-            case > 255:
-                throw new EntityValidationException($"{nameof(Name)} should not have more than 255 characters.");
-        }
-        if (Description.Length > 10000)
-            throw new EntityValidationException($"{nameof(Description)} should not have more than 10.000 characters.");
+        DomainValidation.NotNullOrEmpty(Name, nameof(Name));
+        DomainValidation.NotNull(Description, nameof(Description));
+        DomainValidation.MinLength(Name, 3, nameof(Name));
+        DomainValidation.MaxLength(Name, 255, nameof(Name));
+        DomainValidation.MaxLength(Description, 10000, nameof(Description));
     }
 }
