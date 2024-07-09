@@ -3,7 +3,7 @@ using DomainEntity = Lm.Streamthis.Catalog.Domain.Entities;
 
 namespace Lm.Streamthis.Catalog.UnitTests.Domain.Entities.Category;
 
-public class CategoryTestFixture : BaseFixture
+public class CategoryFixture : BaseFixture
 {
     public string GetValidCategoryName()
     {
@@ -32,8 +32,8 @@ public class CategoryTestFixture : BaseFixture
         new(GetValidCategoryName(),GetValidCategoryDescription());
 }
 
-[CollectionDefinition(nameof(CategoryTestFixture))]
+[CollectionDefinition(nameof(CategoryFixture))]
 public class CategoryTestFixtureCollection
-    : ICollectionFixture<CategoryTestFixture>
+    : ICollectionFixture<CategoryFixture>
 {
 }
