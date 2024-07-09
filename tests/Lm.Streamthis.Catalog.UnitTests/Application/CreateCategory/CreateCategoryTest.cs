@@ -1,7 +1,9 @@
-using FluentAssertions;
-using UseCases = Lm.Streamthis.Catalog.Application.UseCases.Category.CreateCategory;
-using Lm.Streamthis.Catalog.Domain.Entities;
 using Moq;
+using FluentAssertions;
+using Lm.Streamthis.Catalog.Domain.Entities;
+using Lm.Streamthis.Catalog.Application.UseCases.Category.CreateCategory;
+using Lm.Streamthis.Catalog.Domain.Exceptions;
+using UseCases = Lm.Streamthis.Catalog.Application.UseCases.Category.CreateCategory;
 
 namespace Lm.Streamthis.Catalog.UnitTests.Application.CreateCategory;
 
@@ -12,8 +14,8 @@ public class CreateCategoryTest(CreateCategoryFixture fixture)
     [Trait("Application", "Create Category")]
     public async void Should_Create_Category()
     {
-        var repositoryMock = CreateCategoryFixture.GetMockRepository;
-        var unitOfWorkMock = CreateCategoryFixture.GetMockUnitOfWork;
+        var repositoryMock = fixture.GetMockRepository;
+        var unitOfWorkMock = fixture.GetMockUnitOfWork;
         
         var useCase = new UseCases.CreateCategory(repositoryMock.Object, unitOfWorkMock.Object);
         
@@ -35,5 +37,46 @@ public class CreateCategoryTest(CreateCategoryFixture fixture)
         output.IsActive.Should().Be(input.IsActive);
         output.Id.Should().NotBeEmpty();
         output.CreatedAt.Should().NotBeSameDateAs(default);
+    }
+
+    [Theory(DisplayName = nameof(Should_Throw_Error_When_Initialization_IsUnsuccessful))]
+    [Trait("Application", "Create Category")]
+    [MemberData(nameof(GetInvalidInputs))]
+    public async void Should_Throw_Error_When_Initialization_IsUnsuccessful(
+        CreateCategoryInput invalidInput, 
+        string exceptionMessage)
+    {
+        var useCase = new UseCases.CreateCategory(
+            fixture.GetMockRepository.Object, 
+            fixture.GetMockUnitOfWork.Object);
+        
+        var action = async () => 
+            await useCase.Handle(invalidInput, CancellationToken.None);
+
+        await action.Should()
+            .ThrowAsync<EntityValidationException>()
+            .WithMessage(exceptionMessage);
+    }
+
+    public static IEnumerable<object[]> GetInvalidInputs()
+    {
+        var fixture = new CreateCategoryFixture();
+        var invalidInputList = new List<object[]>();
+
+        var inputWithShortName = fixture.GetValidInput();
+        inputWithShortName.Name = inputWithShortName.Name[..2];
+        
+        var inputWithLongName = fixture.GetValidInput();
+        while (inputWithLongName.Name.Length <= 255)
+            inputWithLongName.Name = $"{inputWithLongName.Name} {fixture.Faker.Commerce.ProductName()}";
+
+        var inputWithNullName = fixture.GetValidInput();
+        inputWithNullName.Name = null!;
+
+        invalidInputList.Add([inputWithShortName, "Name should not have less than 3 characters."]);
+        invalidInputList.Add([inputWithLongName, "Name should not have more than 255 characters."]);
+        invalidInputList.Add([inputWithNullName, "Name should not be null or empty."]);
+
+        return invalidInputList;
     }
 }

@@ -39,9 +39,9 @@ public class CreateCategoryFixture : BaseFixture
             GetValidCategoryDescription(),
             GetRandomBoolean());
 
-    public static Mock<ICategoryRepository> GetMockRepository => new();
+    public Mock<ICategoryRepository> GetMockRepository => new();
     
-    public static Mock<IUnitOfWork> GetMockUnitOfWork => new();
+    public Mock<IUnitOfWork> GetMockUnitOfWork => new();
 }
 
 [CollectionDefinition(nameof(CreateCategoryFixture))]
