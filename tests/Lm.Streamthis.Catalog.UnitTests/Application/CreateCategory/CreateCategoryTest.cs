@@ -72,11 +72,21 @@ public class CreateCategoryTest(CreateCategoryFixture fixture)
 
         var inputWithNullName = fixture.GetValidInput();
         inputWithNullName.Name = null!;
+        
+        var inputWithLongDescription = fixture.GetValidInput();
+        while (inputWithLongDescription.Description.Length <= 10_000)
+            inputWithLongDescription.Description = 
+                $"{inputWithLongDescription.Description} {fixture.Faker.Commerce.ProductName()}";
+
+        var inputWithNullDescription = fixture.GetValidInput();
+        inputWithNullDescription.Description = null!;
 
         invalidInputList.Add([inputWithShortName, "Name should not have less than 3 characters."]);
         invalidInputList.Add([inputWithLongName, "Name should not have more than 255 characters."]);
         invalidInputList.Add([inputWithNullName, "Name should not be null or empty."]);
-
+        invalidInputList.Add([inputWithLongDescription, "Description should not have more than 10000 characters."]);
+        invalidInputList.Add([inputWithNullDescription, "Description should not be null."]);
+        
         return invalidInputList;
     }
 }
