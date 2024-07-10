@@ -39,6 +39,57 @@ public class CreateCategoryTest(CreateCategoryFixture fixture)
         output.CreatedAt.Should().NotBeSameDateAs(default);
     }
 
+    [Fact(DisplayName = nameof(Should_Create_Category_Only_With_Name))]
+    [Trait("Application ", "Create Category")]
+    public async void Should_Create_Category_Only_With_Name()
+    {
+        var repositoryMock = fixture.GetMockRepository;
+        var unitOfWorkMock = fixture.GetMockUnitOfWork;
+
+        var useCase = new UseCases.CreateCategory(repositoryMock.Object, unitOfWorkMock.Object);
+        
+        var input = new CreateCategoryInput(fixture.GetValidInput().Name);
+        var output = await useCase.Handle(input, CancellationToken.None);
+
+        repositoryMock.Verify(repository => 
+            repository.Insert(
+                It.IsAny<Category>(), 
+                It.IsAny<CancellationToken>()), 
+            Times.Once);
+        unitOfWorkMock.Verify(uow =>
+            uow.Commit(It.IsAny<CancellationToken>()));
+        output.Name.Should().NotBeNull();
+        output.Name.Should().Be(input.Name);
+        output.Description.Should().NotBeNull();
+        output.Description.Should().Be("");
+        output.IsActive.Should().BeTrue();
+        output.Id.Should().NotBeEmpty();
+        output.CreatedAt.Should().NotBeSameDateAs(default);
+    }
+
+    [Fact(DisplayName = nameof(Should_Create_Category_Only_With_Name_And_Description))]
+    [Trait("Application ", "Create Category")]
+    public async void Should_Create_Category_Only_With_Name_And_Description()
+    {
+        var repositoryMock = fixture.GetMockRepository;
+        var unitOfWorkMock = fixture.GetMockUnitOfWork;
+
+        var useCase = new UseCases.CreateCategory(repositoryMock.Object, unitOfWorkMock.Object);
+
+        var generalInput = fixture.GetValidInput();
+        var input = new CreateCategoryInput(generalInput.Name, generalInput.Description);
+
+        var output = await useCase.Handle(input, CancellationToken.None);
+
+        output.Name.Should().NotBeEmpty();
+        output.Name.Should().Be(input.Name);
+        output.Description.Should().NotBeNull();
+        output.Description.Should().Be(input.Description);
+        output.IsActive.Should().BeTrue();
+        output.Id.Should().NotBeEmpty();
+        output.CreatedAt.Should().NotBeSameDateAs(default);
+    }
+
     [Theory(DisplayName = nameof(Should_Throw_Error_When_Initialization_IsUnsuccessful))]
     [Trait("Application", "Create Category")]
     [MemberData(nameof(GetInvalidInputs))]
