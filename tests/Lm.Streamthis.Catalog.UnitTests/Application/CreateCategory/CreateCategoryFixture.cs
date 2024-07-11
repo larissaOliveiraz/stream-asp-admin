@@ -78,9 +78,9 @@ public class CreateCategoryFixture : BaseFixture
         return requestWithLongDescription;
     }
 
-    public Mock<ICategoryRepository> GetMockRepository => new();
+    public Mock<ICategoryRepository> GetMockRepository() => new();
     
-    public Mock<IUnitOfWork> GetMockUnitOfWork => new();
+    public Mock<IUnitOfWork> GetMockUnitOfWork() => new();
 }
 
 [CollectionDefinition(nameof(CreateCategoryFixture))]
