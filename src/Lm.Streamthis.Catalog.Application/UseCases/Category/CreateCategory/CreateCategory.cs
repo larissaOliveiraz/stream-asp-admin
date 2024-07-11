@@ -1,5 +1,6 @@
 ﻿using Lm.Streamthis.Catalog.Application.Interfaces;
 using Lm.Streamthis.Catalog.Domain.Repositories;
+using MediatR;
 using DomainEntities = Lm.Streamthis.Catalog.Domain.Entities;
 
 namespace Lm.Streamthis.Catalog.Application.UseCases.Category.CreateCategory;
