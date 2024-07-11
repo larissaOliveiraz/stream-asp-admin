@@ -90,10 +90,13 @@ public class CreateCategoryTest(CreateCategoryFixture fixture)
         output.CreatedAt.Should().NotBeSameDateAs(default);
     }
 
-    [Theory(DisplayName = nameof(Should_Throw_Error_When_Initialization_IsUnsuccessful))]
+    [Theory(DisplayName = nameof(Should_Throw_Error_When_Input_IsInvalid))]
     [Trait("Application", "Create Category")]
-    [MemberData(nameof(GetInvalidInputs))]
-    public async void Should_Throw_Error_When_Initialization_IsUnsuccessful(
+    [MemberData(
+        nameof(CreateCategoryDataGenerator.GetInvalidInputs),
+        parameters: 25,
+        MemberType = typeof(CreateCategoryDataGenerator))]
+    public async void Should_Throw_Error_When_Input_IsInvalid(
         CreateCategoryInput invalidInput, 
         string exceptionMessage)
     {
@@ -109,35 +112,5 @@ public class CreateCategoryTest(CreateCategoryFixture fixture)
             .WithMessage(exceptionMessage);
     }
 
-    public static IEnumerable<object[]> GetInvalidInputs()
-    {
-        var fixture = new CreateCategoryFixture();
-        var invalidInputList = new List<object[]>();
-
-        var inputWithShortName = fixture.GetValidInput();
-        inputWithShortName.Name = inputWithShortName.Name[..2];
-        
-        var inputWithLongName = fixture.GetValidInput();
-        while (inputWithLongName.Name.Length <= 255)
-            inputWithLongName.Name = $"{inputWithLongName.Name} {fixture.Faker.Commerce.ProductName()}";
-
-        var inputWithNullName = fixture.GetValidInput();
-        inputWithNullName.Name = null!;
-        
-        var inputWithLongDescription = fixture.GetValidInput();
-        while (inputWithLongDescription.Description.Length <= 10_000)
-            inputWithLongDescription.Description = 
-                $"{inputWithLongDescription.Description} {fixture.Faker.Commerce.ProductName()}";
-
-        var inputWithNullDescription = fixture.GetValidInput();
-        inputWithNullDescription.Description = null!;
-
-        invalidInputList.Add([inputWithShortName, "Name should not have less than 3 characters."]);
-        invalidInputList.Add([inputWithLongName, "Name should not have more than 255 characters."]);
-        invalidInputList.Add([inputWithNullName, "Name should not be null or empty."]);
-        invalidInputList.Add([inputWithLongDescription, "Description should not have more than 10000 characters."]);
-        invalidInputList.Add([inputWithNullDescription, "Description should not be null."]);
-        
-        return invalidInputList;
-    }
+    
 }
