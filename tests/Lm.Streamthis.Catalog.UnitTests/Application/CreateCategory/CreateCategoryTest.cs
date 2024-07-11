@@ -19,8 +19,8 @@ public class CreateCategoryTest(CreateCategoryFixture fixture)
         
         var useCase = new UseCases.CreateCategory(repositoryMock.Object, unitOfWorkMock.Object);
         
-        var input = fixture.GetValidInput();
-        var output = await useCase.Handle(input, CancellationToken.None);
+        var request = fixture.GetValidRequest();
+        var response = await useCase.Handle(request, CancellationToken.None);
 
         repositoryMock.Verify(repository =>
             repository.Insert(
@@ -31,12 +31,12 @@ public class CreateCategoryTest(CreateCategoryFixture fixture)
         unitOfWorkMock.Verify(uow =>
             uow.Commit(It.IsAny<CancellationToken>()), 
             Times.Once);
-        output.Should().NotBeNull();
-        output.Name.Should().Be(input.Name);
-        output.Description.Should().Be(input.Description);
-        output.IsActive.Should().Be(input.IsActive);
-        output.Id.Should().NotBeEmpty();
-        output.CreatedAt.Should().NotBeSameDateAs(default);
+        response.Should().NotBeNull();
+        response.Name.Should().Be(request.Name);
+        response.Description.Should().Be(request.Description);
+        response.IsActive.Should().Be(request.IsActive);
+        response.Id.Should().NotBeEmpty();
+        response.CreatedAt.Should().NotBeSameDateAs(default);
     }
 
     [Fact(DisplayName = nameof(Should_Create_Category_Only_With_Name))]
@@ -48,8 +48,8 @@ public class CreateCategoryTest(CreateCategoryFixture fixture)
 
         var useCase = new UseCases.CreateCategory(repositoryMock.Object, unitOfWorkMock.Object);
         
-        var input = new CreateCategoryInput(fixture.GetValidInput().Name);
-        var output = await useCase.Handle(input, CancellationToken.None);
+        var request = new CreateCategoryRequest(fixture.GetValidRequest().Name);
+        var response = await useCase.Handle(request, CancellationToken.None);
 
         repositoryMock.Verify(repository => 
             repository.Insert(
@@ -58,13 +58,13 @@ public class CreateCategoryTest(CreateCategoryFixture fixture)
             Times.Once);
         unitOfWorkMock.Verify(uow =>
             uow.Commit(It.IsAny<CancellationToken>()));
-        output.Name.Should().NotBeNull();
-        output.Name.Should().Be(input.Name);
-        output.Description.Should().NotBeNull();
-        output.Description.Should().Be("");
-        output.IsActive.Should().BeTrue();
-        output.Id.Should().NotBeEmpty();
-        output.CreatedAt.Should().NotBeSameDateAs(default);
+        response.Name.Should().NotBeNull();
+        response.Name.Should().Be(request.Name);
+        response.Description.Should().NotBeNull();
+        response.Description.Should().Be("");
+        response.IsActive.Should().BeTrue();
+        response.Id.Should().NotBeEmpty();
+        response.CreatedAt.Should().NotBeSameDateAs(default);
     }
 
     [Fact(DisplayName = nameof(Should_Create_Category_Only_With_Name_And_Description))]
@@ -76,28 +76,28 @@ public class CreateCategoryTest(CreateCategoryFixture fixture)
 
         var useCase = new UseCases.CreateCategory(repositoryMock.Object, unitOfWorkMock.Object);
 
-        var generalInput = fixture.GetValidInput();
-        var input = new CreateCategoryInput(generalInput.Name, generalInput.Description);
+        var normalRequest = fixture.GetValidRequest();
+        var request = new CreateCategoryRequest(normalRequest.Name, normalRequest.Description);
 
-        var output = await useCase.Handle(input, CancellationToken.None);
+        var response = await useCase.Handle(request, CancellationToken.None);
 
-        output.Name.Should().NotBeEmpty();
-        output.Name.Should().Be(input.Name);
-        output.Description.Should().NotBeNull();
-        output.Description.Should().Be(input.Description);
-        output.IsActive.Should().BeTrue();
-        output.Id.Should().NotBeEmpty();
-        output.CreatedAt.Should().NotBeSameDateAs(default);
+        response.Name.Should().NotBeEmpty();
+        response.Name.Should().Be(request.Name);
+        response.Description.Should().NotBeNull();
+        response.Description.Should().Be(request.Description);
+        response.IsActive.Should().BeTrue();
+        response.Id.Should().NotBeEmpty();
+        response.CreatedAt.Should().NotBeSameDateAs(default);
     }
 
     [Theory(DisplayName = nameof(Should_Throw_Error_When_Input_IsInvalid))]
     [Trait("Application", "Create Category")]
     [MemberData(
-        nameof(CreateCategoryDataGenerator.GetInvalidInputs),
+        nameof(CreateCategoryDataGenerator.GetInvalidRequests),
         parameters: 25,
         MemberType = typeof(CreateCategoryDataGenerator))]
     public async void Should_Throw_Error_When_Input_IsInvalid(
-        CreateCategoryInput invalidInput, 
+        CreateCategoryRequest invalidRequest, 
         string exceptionMessage)
     {
         var useCase = new UseCases.CreateCategory(
@@ -105,7 +105,7 @@ public class CreateCategoryTest(CreateCategoryFixture fixture)
             fixture.GetMockUnitOfWork.Object);
         
         var action = async () => 
-            await useCase.Handle(invalidInput, CancellationToken.None);
+            await useCase.Handle(invalidRequest, CancellationToken.None);
 
         await action.Should()
             .ThrowAsync<EntityValidationException>()

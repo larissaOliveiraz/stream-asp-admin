@@ -16,19 +16,19 @@ public class CreateCategory : ICreateCategory
         _unitOfWork = unitOfWork;
     }
 
-    public async Task<CreateCategoryOutput> Handle(
-        CreateCategoryInput input,
+    public async Task<CreateCategoryResponse> Handle(
+        CreateCategoryRequest request,
         CancellationToken cancellationToken)
     {
         var category = new DomainEntities.Category(
-            input.Name, 
-            input.Description, 
-            input.IsActive);
+            request.Name, 
+            request.Description, 
+            request.IsActive);
 
         await _categoryRepository.Insert(category, cancellationToken);
         await _unitOfWork.Commit(cancellationToken);
 
-        return new CreateCategoryOutput(
+        return new CreateCategoryResponse(
             category.Id, 
             category.Name, 
             category.Description, 

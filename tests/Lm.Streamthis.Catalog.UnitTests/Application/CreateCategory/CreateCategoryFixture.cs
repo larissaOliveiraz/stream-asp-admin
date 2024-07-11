@@ -33,48 +33,49 @@ public class CreateCategoryFixture : BaseFixture
 
     private static bool GetRandomBoolean() => new Random().NextDouble() < 0.5;
 
-    public CreateCategoryInput GetValidInput() =>
+    public CreateCategoryRequest GetValidRequest() =>
         new(
             GetValidCategoryName(),
             GetValidCategoryDescription(),
             GetRandomBoolean());
 
-    public CreateCategoryInput GetInvalidInputNullName()
+    public CreateCategoryRequest GetInvalidRequestNullName()
     {
-        var inputWithNullName = GetValidInput();
-        inputWithNullName.Name = null!;
-        return inputWithNullName;
+        var requestWithNullName = GetValidRequest();
+        requestWithNullName.Name = null!;
+        return requestWithNullName;
     }
 
-    public CreateCategoryInput GetInvalidInputShortName()
+    public CreateCategoryRequest GetInvalidRequestShortName()
     {
-        var inputWithShortName = GetValidInput();
-        inputWithShortName.Name = inputWithShortName.Name[..2];
-        return inputWithShortName;
+        var requestWithShortName = GetValidRequest();
+        requestWithShortName.Name = requestWithShortName.Name[..2];
+        return requestWithShortName;
     }
 
-    public CreateCategoryInput GetInvalidInputLongName()
+    public CreateCategoryRequest GetInvalidRequestLongName()
     {
-        var inputWithLongName = GetValidInput();
-        while (inputWithLongName.Name.Length <= 255)
-            inputWithLongName.Name = $"{inputWithLongName.Name} {Faker.Commerce.ProductName()}";
-        return inputWithLongName;
+        var requestWithLongName = GetValidRequest();
+        while (requestWithLongName.Name.Length <= 255)
+            requestWithLongName.Name = $"{requestWithLongName.Name} {Faker.Commerce.ProductName()}";
+        return requestWithLongName;
     }
 
-    public CreateCategoryInput GetInvalidInputNullDescription()
+    public CreateCategoryRequest GetInvalidRequestNullDescription()
     {
-        var inputWithNullDescription = GetValidInput();
-        inputWithNullDescription.Description = null!;
-        return inputWithNullDescription;
+        var requestWithNullDescription = GetValidRequest();
+        requestWithNullDescription.Description = null!;
+        return requestWithNullDescription;
     }
 
-    public CreateCategoryInput GetInvalidInputLongDescription()
+    public CreateCategoryRequest GetInvalidRequestLongDescription
+        ()
     {
-        var inputWithLongDescription = GetValidInput();
-        while (inputWithLongDescription.Description.Length <= 10_000)
-            inputWithLongDescription.Description = 
-                $"{inputWithLongDescription.Description} {Faker.Commerce.ProductName()}";
-        return inputWithLongDescription;
+        var requestWithLongDescription = GetValidRequest();
+        while (requestWithLongDescription.Description.Length <= 10_000)
+            requestWithLongDescription.Description = 
+                $"{requestWithLongDescription.Description} {Faker.Commerce.ProductName()}";
+        return requestWithLongDescription;
     }
 
     public Mock<ICategoryRepository> GetMockRepository => new();

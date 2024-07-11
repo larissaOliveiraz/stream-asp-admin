@@ -1,6 +1,6 @@
 ﻿namespace Lm.Streamthis.Catalog.Application.UseCases.Category.CreateCategory;
 
-public class CreateCategoryOutput(Guid id, string name, string description, bool isActive, DateTime createdAt)
+public class CreateCategoryResponse(Guid id, string name, string description, bool isActive, DateTime createdAt)
 {
     public Guid Id { get; set; } = id;
     public string Name { get; set; } = name;
