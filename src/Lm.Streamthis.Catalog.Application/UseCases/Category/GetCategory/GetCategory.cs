@@ -3,7 +3,7 @@ using MediatR;
 
 namespace Lm.Streamthis.Catalog.Application.UseCases.Category.GetCategory;
 
-public class GetCategory(ICategoryRepository repository) : IRequestHandler<GetCategoryRequest, GetCategoryResponse>
+public class GetCategory(ICategoryRepository repository) : IGetCategory
 {
     public async Task<GetCategoryResponse> Handle(GetCategoryRequest request, CancellationToken cancellationToken)
     {
