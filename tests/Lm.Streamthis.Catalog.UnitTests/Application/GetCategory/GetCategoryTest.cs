@@ -3,7 +3,7 @@ using FluentAssertions;
 using Lm.Streamthis.Catalog.Application.Exceptions;
 using Moq;
 using Lm.Streamthis.Catalog.Application.UseCases.Category.GetCategory;
-using UseCases = Lm.Streamthis.Catalog.Application.UseCases.Category.GetCategory;
+using UseCase = Lm.Streamthis.Catalog.Application.UseCases.Category.GetCategory;
 
 namespace Lm.Streamthis.Catalog.UnitTests.Application.GetCategory;
 
@@ -24,7 +24,7 @@ public class GetCategoryTest(GetCategoryFixture fixture)
 
         var request = new GetCategoryRequest(category.Id);
 
-        var useCase = new UseCases.GetCategory(repositoryMock.Object);
+        var useCase = new UseCase.GetCategory(repositoryMock.Object);
 
         var response = await useCase.Handle(request, CancellationToken.None);
 
@@ -41,9 +41,9 @@ public class GetCategoryTest(GetCategoryFixture fixture)
         response.CreatedAt.Should().Be(category.CreatedAt);
     }
 
-    [Fact(DisplayName = nameof(Should_Throw_Exception_When_Category_Not_Found))]
+    [Fact(DisplayName = nameof(Should_Throw_Exception_When_Category_NotFound))]
     [Trait("Application", "Get Category")]
-    public async void Should_Throw_Exception_When_Category_Not_Found()
+    public async void Should_Throw_Exception_When_Category_NotFound()
     {
         var repositoryMock = fixture.GetMockRepository();
         var randomId = Guid.NewGuid();
@@ -55,7 +55,7 @@ public class GetCategoryTest(GetCategoryFixture fixture)
 
         var request = new GetCategoryRequest(randomId);
 
-        var useCase = new UseCases.GetCategory(repositoryMock.Object);
+        var useCase = new UseCase.GetCategory(repositoryMock.Object);
 
         var action = async () => 
             await useCase.Handle(request, CancellationToken.None);

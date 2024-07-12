@@ -3,7 +3,7 @@ using FluentAssertions;
 using Lm.Streamthis.Catalog.Domain.Entities;
 using Lm.Streamthis.Catalog.Application.UseCases.Category.CreateCategory;
 using Lm.Streamthis.Catalog.Domain.Exceptions;
-using UseCases = Lm.Streamthis.Catalog.Application.UseCases.Category.CreateCategory;
+using UseCase = Lm.Streamthis.Catalog.Application.UseCases.Category.CreateCategory;
 
 namespace Lm.Streamthis.Catalog.UnitTests.Application.CreateCategory;
 
@@ -17,7 +17,7 @@ public class CreateCategoryTest(CreateCategoryFixture fixture)
         var repositoryMock = fixture.GetMockRepository();
         var unitOfWorkMock = fixture.GetMockUnitOfWork();
         
-        var useCase = new UseCases.CreateCategory(repositoryMock.Object, unitOfWorkMock.Object);
+        var useCase = new UseCase.CreateCategory(repositoryMock.Object, unitOfWorkMock.Object);
         
         var request = fixture.GetValidRequest();
         var response = await useCase.Handle(request, CancellationToken.None);
@@ -46,7 +46,7 @@ public class CreateCategoryTest(CreateCategoryFixture fixture)
         var repositoryMock = fixture.GetMockRepository();
         var unitOfWorkMock = fixture.GetMockUnitOfWork();
 
-        var useCase = new UseCases.CreateCategory(repositoryMock.Object, unitOfWorkMock.Object);
+        var useCase = new UseCase.CreateCategory(repositoryMock.Object, unitOfWorkMock.Object);
         
         var request = new CreateCategoryRequest(fixture.GetValidRequest().Name);
         var response = await useCase.Handle(request, CancellationToken.None);
@@ -74,7 +74,7 @@ public class CreateCategoryTest(CreateCategoryFixture fixture)
         var repositoryMock = fixture.GetMockRepository();
         var unitOfWorkMock = fixture.GetMockUnitOfWork();
 
-        var useCase = new UseCases.CreateCategory(repositoryMock.Object, unitOfWorkMock.Object);
+        var useCase = new UseCase.CreateCategory(repositoryMock.Object, unitOfWorkMock.Object);
 
         var normalRequest = fixture.GetValidRequest();
         var request = new CreateCategoryRequest(normalRequest.Name, normalRequest.Description);
@@ -100,7 +100,7 @@ public class CreateCategoryTest(CreateCategoryFixture fixture)
         CreateCategoryRequest invalidRequest, 
         string exceptionMessage)
     {
-        var useCase = new UseCases.CreateCategory(
+        var useCase = new UseCase.CreateCategory(
             fixture.GetMockRepository().Object, 
             fixture.GetMockUnitOfWork().Object);
         
