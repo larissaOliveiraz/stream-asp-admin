@@ -1,5 +1,6 @@
 ﻿using Moq;
 using FluentAssertions;
+using Lm.Streamthis.Catalog.Application.Exceptions;
 using Lm.Streamthis.Catalog.Application.UseCases.Category.UpdateCategory;
 using Lm.Streamthis.Catalog.Domain.Entities;
 using UseCase = Lm.Streamthis.Catalog.Application.UseCases.Category.UpdateCategory;
@@ -40,6 +41,36 @@ public class UpdateCategoryTest(UpdateCategoryFixture fixture)
             Times.Once);
         unitOfWork.Verify(uow =>
                 uow.Commit(It.IsAny<CancellationToken>()),
+            Times.Once);
+    }
+
+    [Fact(DisplayName = nameof(Should_Throw_Exception_When_Category_NotFound))]
+    [Trait("Application", "Update Category")]
+    public async void Should_Throw_Exception_When_Category_NotFound()
+    {
+        var repositoryMock = fixture.GetMockRepository();
+        var unitOfWork = fixture.GetMockUnitOfWork();
+
+        var randomId = Guid.NewGuid();
+        repositoryMock
+            .Setup(x =>
+                x.Get(randomId, It.IsAny<CancellationToken>()))
+            .ThrowsAsync(new NotFoundException($"Category with id '{randomId}' was not found."));
+
+        var request = new UpdateCategoryRequest(
+            randomId, 
+            fixture.GetValidCategoryName(),
+            fixture.GetValidCategoryDescription(),
+            fixture.GetRandomBoolean());
+
+        var useCase = new UseCase.UpdateCategory(repositoryMock.Object, unitOfWork.Object);
+
+        var action = async () =>
+            await useCase.Handle(request, CancellationToken.None);
+
+        await action.Should().ThrowAsync<NotFoundException>();
+        repositoryMock.Verify(repository => 
+            repository.Get(randomId, It.IsAny<CancellationToken>()),
             Times.Once);
     }
 }
