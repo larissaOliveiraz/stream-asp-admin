@@ -1,4 +1,5 @@
 ﻿using Lm.Streamthis.Catalog.Application.Interfaces;
+using Lm.Streamthis.Catalog.Application.UseCases.Category.UpdateCategory;
 using Lm.Streamthis.Catalog.Domain.Entities;
 using Lm.Streamthis.Catalog.Domain.Repositories;
 using Lm.Streamthis.Catalog.UnitTests.Common;
@@ -36,6 +37,12 @@ public class UpdateCategoryFixture : BaseFixture
     public Category GetValidCategory() =>
         new(GetValidCategoryName(),
             GetValidCategoryDescription(), 
+            GetRandomBoolean());
+
+    public UpdateCategoryRequest GetValidRequest(Guid? id = null) =>
+        new(id ?? Guid.NewGuid(),
+            GetValidCategoryName(),
+            GetValidCategoryDescription(),
             GetRandomBoolean());
     
     public Mock<ICategoryRepository> GetMockRepository() => new();

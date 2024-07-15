@@ -12,11 +12,7 @@ public class UpdateCategoryDataGenerator
         {
             var validCategory = fixture.GetValidCategory();
             
-            var validRequest = new UpdateCategoryRequest(
-                validCategory.Id, 
-                fixture.GetValidCategoryName(),
-                fixture.GetValidCategoryDescription(), 
-                fixture.GetRandomBoolean());
+            var validRequest = fixture.GetValidRequest(validCategory.Id);
 
             yield return [validCategory, validRequest];
         }

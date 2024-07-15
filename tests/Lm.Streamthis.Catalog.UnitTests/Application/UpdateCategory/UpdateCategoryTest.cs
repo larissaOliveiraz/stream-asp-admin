@@ -51,17 +51,11 @@ public class UpdateCategoryTest(UpdateCategoryFixture fixture)
         var repositoryMock = fixture.GetMockRepository();
         var unitOfWork = fixture.GetMockUnitOfWork();
 
-        var randomId = Guid.NewGuid();
+        var request = fixture.GetValidRequest();
         repositoryMock
             .Setup(x =>
-                x.Get(randomId, It.IsAny<CancellationToken>()))
-            .ThrowsAsync(new NotFoundException($"Category with id '{randomId}' was not found."));
-
-        var request = new UpdateCategoryRequest(
-            randomId, 
-            fixture.GetValidCategoryName(),
-            fixture.GetValidCategoryDescription(),
-            fixture.GetRandomBoolean());
+                x.Get(request.Id, It.IsAny<CancellationToken>()))
+            .ThrowsAsync(new NotFoundException($"Category with id '{request.Id}' was not found."));
 
         var useCase = new UseCase.UpdateCategory(repositoryMock.Object, unitOfWork.Object);
 
@@ -70,7 +64,7 @@ public class UpdateCategoryTest(UpdateCategoryFixture fixture)
 
         await action.Should().ThrowAsync<NotFoundException>();
         repositoryMock.Verify(repository => 
-            repository.Get(randomId, It.IsAny<CancellationToken>()),
+            repository.Get(request.Id, It.IsAny<CancellationToken>()),
             Times.Once);
     }
 }
