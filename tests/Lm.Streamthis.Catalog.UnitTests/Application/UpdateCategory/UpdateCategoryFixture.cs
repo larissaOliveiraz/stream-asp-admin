@@ -31,7 +31,7 @@ public class UpdateCategoryFixture : BaseFixture
         return categoryDescription;
     }
     
-    public static bool GetRandomBoolean() => new Random().NextDouble() < 0.5;
+    public bool GetRandomBoolean() => new Random().NextDouble() < 0.5;
     
     public Category GetValidCategory() =>
         new(GetValidCategoryName(),
