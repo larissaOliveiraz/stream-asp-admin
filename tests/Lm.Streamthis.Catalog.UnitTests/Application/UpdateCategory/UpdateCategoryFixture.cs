@@ -45,6 +45,45 @@ public class UpdateCategoryFixture : BaseFixture
             GetValidCategoryDescription(),
             GetRandomBoolean());
     
+    public UpdateCategoryRequest GetInvalidRequestNullName()
+    {
+        var requestWithNullName = GetValidRequest();
+        requestWithNullName.Name = null!;
+        return requestWithNullName;
+    }
+
+    public UpdateCategoryRequest GetInvalidRequestShortName()
+    {
+        var requestWithShortName = GetValidRequest();
+        requestWithShortName.Name = requestWithShortName.Name[..2];
+        return requestWithShortName;
+    }
+
+    public UpdateCategoryRequest GetInvalidRequestLongName()
+    {
+        var requestWithLongName = GetValidRequest();
+        while (requestWithLongName.Name.Length <= 255)
+            requestWithLongName.Name = $"{requestWithLongName.Name} {Faker.Commerce.ProductName()}";
+        return requestWithLongName;
+    }
+
+    public UpdateCategoryRequest GetInvalidRequestNullDescription()
+    {
+        var requestWithNullDescription = GetValidRequest();
+        requestWithNullDescription.Description = null!;
+        return requestWithNullDescription;
+    }
+
+    public UpdateCategoryRequest GetInvalidRequestLongDescription
+        ()
+    {
+        var requestWithLongDescription = GetValidRequest();
+        while (requestWithLongDescription.Description?.Length <= 10_000)
+            requestWithLongDescription.Description = 
+                $"{requestWithLongDescription.Description} {Faker.Commerce.ProductName()}";
+        return requestWithLongDescription;
+    }
+    
     public Mock<ICategoryRepository> GetMockRepository() => new();
     
     public Mock<IUnitOfWork> GetMockUnitOfWork() => new();

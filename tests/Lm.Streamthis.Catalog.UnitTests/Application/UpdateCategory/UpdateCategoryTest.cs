@@ -3,6 +3,7 @@ using FluentAssertions;
 using Lm.Streamthis.Catalog.Application.Exceptions;
 using Lm.Streamthis.Catalog.Application.UseCases.Category.UpdateCategory;
 using Lm.Streamthis.Catalog.Domain.Entities;
+using Lm.Streamthis.Catalog.Domain.Exceptions;
 using Xunit.Abstractions;
 using UseCase = Lm.Streamthis.Catalog.Application.UseCases.Category.UpdateCategory;
 
@@ -62,12 +63,12 @@ public class UpdateCategoryTest(UpdateCategoryFixture fixture)
             .ReturnsAsync(category);
 
         var requestOnlyWithName = new UpdateCategoryRequest(
-            category.Id, 
+            category.Id,
             request.Name);
 
         var useCase = new UseCase.UpdateCategory(repositoryMock.Object, unitOfWork.Object);
         var response = await useCase.Handle(requestOnlyWithName, CancellationToken.None);
-        
+
         response.Should().NotBeNull();
         response.Name.Should().Be(request.Name);
         response.Description.Should().Be(category.Description);
@@ -143,6 +144,38 @@ public class UpdateCategoryTest(UpdateCategoryFixture fixture)
         await action.Should().ThrowAsync<NotFoundException>();
         repositoryMock.Verify(repository =>
                 repository.Get(request.Id, It.IsAny<CancellationToken>()),
+            Times.Once);
+    }
+
+    [Theory(DisplayName = nameof(Should_Throw_Exception_When_Request_IsInvalid))]
+    [Trait("Application", "Update Category")]
+    [MemberData(
+        nameof(UpdateCategoryDataGenerator.GetInvalidRequests),
+        parameters: 10,
+        MemberType = typeof(UpdateCategoryDataGenerator))]
+    public async void Should_Throw_Exception_When_Request_IsInvalid(
+        UpdateCategoryRequest invalidRequest,
+        string exceptionMessage)
+    {
+        var repositoryMock = fixture.GetMockRepository();
+        var unitOfWork = fixture.GetMockUnitOfWork();
+        var validCategory = fixture.GetValidCategory();
+        invalidRequest.Id = validCategory.Id;
+
+        repositoryMock
+            .Setup(x =>
+                x.Get(invalidRequest.Id, It.IsAny<CancellationToken>()))
+            .ReturnsAsync(validCategory);
+
+        var useCase = new UseCase.UpdateCategory(repositoryMock.Object, unitOfWork.Object);
+        var action = async () =>
+            await useCase.Handle(invalidRequest, CancellationToken.None);
+
+        await action.Should()
+            .ThrowAsync<EntityValidationException>()
+            .WithMessage(exceptionMessage);
+        repositoryMock.Verify(repository =>
+                repository.Get(invalidRequest.Id, It.IsAny<CancellationToken>()),
             Times.Once);
     }
 }
