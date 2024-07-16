@@ -4,7 +4,6 @@ using Lm.Streamthis.Catalog.Application.Exceptions;
 using Lm.Streamthis.Catalog.Application.UseCases.Category.UpdateCategory;
 using Lm.Streamthis.Catalog.Domain.Entities;
 using Lm.Streamthis.Catalog.Domain.Exceptions;
-using Xunit.Abstractions;
 using UseCase = Lm.Streamthis.Catalog.Application.UseCases.Category.UpdateCategory;
 
 namespace Lm.Streamthis.Catalog.UnitTests.Application.UpdateCategory;
