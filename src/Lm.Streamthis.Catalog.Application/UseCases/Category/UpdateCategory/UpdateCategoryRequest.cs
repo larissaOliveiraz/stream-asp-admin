@@ -3,11 +3,11 @@ using MediatR;
 
 namespace Lm.Streamthis.Catalog.Application.UseCases.Category.UpdateCategory;
 
-public class UpdateCategoryRequest(Guid id, string name, string description, bool isActive)
+public class UpdateCategoryRequest(Guid id, string name, string? description = null, bool? isActive = null)
     : IRequest<CategoryResponse>
 {
     public Guid Id { get; set; } = id;
     public string Name { get; set; } = name;
-    public string Description { get; set; } = description;
-    public bool IsActive { get; set; } = isActive;
+    public string? Description { get; set; } = description;
+    public bool? IsActive { get; set; } = isActive;
 }

@@ -12,9 +12,11 @@ public class UpdateCategory(ICategoryRepository repository, IUnitOfWork unitOfWo
         
         category.Update(request.Name, request.Description);
 
-        if (category.IsActive != request.IsActive)
-            if (request.IsActive) category.Activate();
-            else category.Deactivate();
+        if (request.IsActive != null && category.IsActive != request.IsActive)
+            if ((bool)request.IsActive!) 
+                category.Activate();
+            else 
+                category.Deactivate();
 
         await repository.Update(category, cancellationToken);
         await unitOfWork.Commit(cancellationToken);
