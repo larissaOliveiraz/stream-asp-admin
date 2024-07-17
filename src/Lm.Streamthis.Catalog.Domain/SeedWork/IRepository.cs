@@ -1,6 +1,6 @@
 ﻿namespace Lm.Streamthis.Catalog.Domain.SeedWork;
 
-public interface IRepository<TAggregate> : IGenericRepository
+public interface IRepository<TAggregate> where TAggregate : AggregateRoot
 {
     public Task Insert(TAggregate aggregate, CancellationToken cancellationToken);
     public Task<TAggregate> Get(Guid id, CancellationToken cancellationToken);
