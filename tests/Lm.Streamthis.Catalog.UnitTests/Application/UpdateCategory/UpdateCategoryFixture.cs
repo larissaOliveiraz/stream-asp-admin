@@ -44,13 +44,6 @@ public class UpdateCategoryFixture : BaseFixture
             GetValidCategoryName(),
             GetValidCategoryDescription(),
             GetRandomBoolean());
-    
-    public UpdateCategoryRequest GetInvalidRequestNullName()
-    {
-        var requestWithNullName = GetValidRequest();
-        requestWithNullName.Name = null!;
-        return requestWithNullName;
-    }
 
     public UpdateCategoryRequest GetInvalidRequestShortName()
     {
@@ -65,13 +58,6 @@ public class UpdateCategoryFixture : BaseFixture
         while (requestWithLongName.Name.Length <= 255)
             requestWithLongName.Name = $"{requestWithLongName.Name} {Faker.Commerce.ProductName()}";
         return requestWithLongName;
-    }
-
-    public UpdateCategoryRequest GetInvalidRequestNullDescription()
-    {
-        var requestWithNullDescription = GetValidRequest();
-        requestWithNullDescription.Description = null!;
-        return requestWithNullDescription;
     }
 
     public UpdateCategoryRequest GetInvalidRequestLongDescription
