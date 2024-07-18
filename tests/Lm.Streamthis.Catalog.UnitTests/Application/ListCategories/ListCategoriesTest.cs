@@ -16,18 +16,13 @@ public class ListCategoriesTest(ListCategoriesFixture fixture)
         var repositoryMock = fixture.GetMockRepository();
         var categoryList = fixture.GetValidCategoryList();
 
-        var request = new UseCase.ListCategoriesRequest(
-            page: 2,
-            perPage: 10,
-            search: "user-search",
-            sort: "name",
-            order: SearchOrder.Asc);
+        var request = fixture.GetValidRequest();
 
         var searchResponse = new SearchResponse<Category>(
             request.Page,
             request.PerPage,
             categoryList,
-            10);
+            new Random().Next(50, 200));
 
         repositoryMock
             .Setup(x =>

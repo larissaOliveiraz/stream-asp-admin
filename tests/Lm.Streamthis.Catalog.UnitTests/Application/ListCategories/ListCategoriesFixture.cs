@@ -1,5 +1,7 @@
-﻿using Lm.Streamthis.Catalog.Domain.Entities;
+﻿using Lm.Streamthis.Catalog.Application.UseCases.Category.ListCategories;
+using Lm.Streamthis.Catalog.Domain.Entities;
 using Lm.Streamthis.Catalog.Domain.Repositories;
+using Lm.Streamthis.Catalog.Domain.SeedWork.SearchableRepository;
 using Lm.Streamthis.Catalog.UnitTests.Common;
 using Moq;
 
@@ -45,6 +47,17 @@ public class ListCategoriesFixture : BaseFixture
             categoryList.Add(GetValidCategory());
 
         return categoryList;
+    }
+
+    public ListCategoriesRequest GetValidRequest()
+    {
+        var randomNumber = new Random();
+        return new ListCategoriesRequest(
+            randomNumber.Next(1, 10),
+            randomNumber.Next(15, 100),
+            Faker.Commerce.ProductName(),
+            Faker.Commerce.ProductName(),
+            randomNumber.Next(1, 10) > 5 ? SearchOrder.Asc : SearchOrder.Desc);
     }
 
     public Mock<ICategoryRepository> GetMockRepository() => new();
