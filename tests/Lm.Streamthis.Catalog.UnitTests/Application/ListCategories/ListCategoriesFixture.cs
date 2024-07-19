@@ -39,7 +39,7 @@ public class ListCategoriesFixture : BaseFixture
             GetValidCategoryDescription(), 
             GetRandomBoolean());
 
-    public List<Category> GetValidCategoryList(int? length = 10)
+    public List<Category> GetValidCategoryList(int? length = 15)
     {
         var categoryList = new List<Category>();
         
