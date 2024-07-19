@@ -10,6 +10,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lm.Streamthis.Catalog.Domai
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lm.Streamthis.Catalog.Application", "src\Lm.Streamthis.Catalog.Application\Lm.Streamthis.Catalog.Application.csproj", "{888512EB-5624-4BBB-8B4A-32CE607B726B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lm.Streamthis.Catalog.IntegrationTests", "tests\Lm.Streamthis.Catalog.IntegrationTests\Lm.Streamthis.Catalog.IntegrationTests.csproj", "{22F6A879-9F06-467E-AC71-7F693D2ECC55}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -28,10 +30,15 @@ Global
 		{888512EB-5624-4BBB-8B4A-32CE607B726B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{888512EB-5624-4BBB-8B4A-32CE607B726B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{888512EB-5624-4BBB-8B4A-32CE607B726B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{22F6A879-9F06-467E-AC71-7F693D2ECC55}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{22F6A879-9F06-467E-AC71-7F693D2ECC55}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{22F6A879-9F06-467E-AC71-7F693D2ECC55}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{22F6A879-9F06-467E-AC71-7F693D2ECC55}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{D4DFC204-B1D5-4BD4-936C-0BE3053406A1} = {8027D18E-07A2-4141-8E20-4D6142533341}
 		{663A2756-516F-4582-9BDC-FE65849B6604} = {56FBAB2F-F176-4302-8E87-881A0E2588D6}
 		{888512EB-5624-4BBB-8B4A-32CE607B726B} = {56FBAB2F-F176-4302-8E87-881A0E2588D6}
+		{22F6A879-9F06-467E-AC71-7F693D2ECC55} = {8027D18E-07A2-4141-8E20-4D6142533341}
 	EndGlobalSection
 EndGlobal
