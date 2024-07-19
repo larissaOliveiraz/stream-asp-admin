@@ -22,13 +22,13 @@ public class ListCategories(ICategoryRepository repository) : IListCategories
             searchResponse.PerPage,
             searchResponse.Total,
             searchResponse.Items
-                .Select(x => 
+                .Select(item => 
                     new CategoryResponse(
-                        x.Id,
-                        x.Name,
-                        x.Description,
-                        x.IsActive,
-                        x.CreatedAt)
+                        item.Id,
+                        item.Name,
+                        item.Description,
+                        item.IsActive,
+                        item.CreatedAt)
                 ).ToList());
     }
 }
