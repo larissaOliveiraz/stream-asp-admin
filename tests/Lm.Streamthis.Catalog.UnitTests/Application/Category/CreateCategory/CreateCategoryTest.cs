@@ -1,11 +1,11 @@
-using Moq;
 using FluentAssertions;
-using Lm.Streamthis.Catalog.Domain.Entities;
 using Lm.Streamthis.Catalog.Application.UseCases.Category.CreateCategory;
 using Lm.Streamthis.Catalog.Domain.Exceptions;
+using Moq;
+using DomainEntities = Lm.Streamthis.Catalog.Domain.Entities;
 using UseCase = Lm.Streamthis.Catalog.Application.UseCases.Category.CreateCategory;
 
-namespace Lm.Streamthis.Catalog.UnitTests.Application.CreateCategory;
+namespace Lm.Streamthis.Catalog.UnitTests.Application.Category.CreateCategory;
 
 [Collection(nameof(CreateCategoryFixture))]
 public class CreateCategoryTest(CreateCategoryFixture fixture)
@@ -24,7 +24,7 @@ public class CreateCategoryTest(CreateCategoryFixture fixture)
 
         repositoryMock.Verify(repository =>
             repository.Insert(
-                It.IsAny<Category>(), 
+                It.IsAny<DomainEntities.Category>(), 
                 It.IsAny<CancellationToken>()
             ), 
             Times.Once);
@@ -53,7 +53,7 @@ public class CreateCategoryTest(CreateCategoryFixture fixture)
 
         repositoryMock.Verify(repository => 
             repository.Insert(
-                It.IsAny<Category>(), 
+                It.IsAny<DomainEntities.Category>(), 
                 It.IsAny<CancellationToken>()), 
             Times.Once);
         unitOfWorkMock.Verify(uow =>

@@ -1,7 +1,7 @@
 ﻿using FluentAssertions;
 using Lm.Streamthis.Catalog.Application.UseCases.Category.UpdateCategory;
 
-namespace Lm.Streamthis.Catalog.UnitTests.Application.UpdateCategory;
+namespace Lm.Streamthis.Catalog.UnitTests.Application.Category.UpdateCategory;
 
 [Collection(nameof(UpdateCategoryFixture))]
 public class UpdateCategoryRequestValidatorTest(UpdateCategoryFixture fixture)

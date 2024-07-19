@@ -1,7 +1,7 @@
 ﻿using Lm.Streamthis.Catalog.Application.UseCases.Category.GetCategory;
-using Lm.Streamthis.Catalog.UnitTests.Application.Common;
+using Lm.Streamthis.Catalog.UnitTests.Application.Category.Common;
 
-namespace Lm.Streamthis.Catalog.UnitTests.Application.GetCategory;
+namespace Lm.Streamthis.Catalog.UnitTests.Application.Category.GetCategory;
 
 public class GetCategoryFixture : CategoryBaseFixture
 {

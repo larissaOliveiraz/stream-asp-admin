@@ -1,10 +1,10 @@
 ﻿using Lm.Streamthis.Catalog.Application.Interfaces;
-using Lm.Streamthis.Catalog.Domain.Entities;
 using Lm.Streamthis.Catalog.Domain.Repositories;
 using Lm.Streamthis.Catalog.UnitTests.Common;
 using Moq;
+using DomainEntities = Lm.Streamthis.Catalog.Domain.Entities;
 
-namespace Lm.Streamthis.Catalog.UnitTests.Application.Common;
+namespace Lm.Streamthis.Catalog.UnitTests.Application.Category.Common;
 
 public class CategoryBaseFixture : BaseFixture
 {
@@ -37,6 +37,6 @@ public class CategoryBaseFixture : BaseFixture
     
     protected static bool GetRandomBoolean() => new Random().NextDouble() < 0.5;
     
-    public Category GetValidCategory() =>
+    public DomainEntities.Category GetValidCategory() =>
         new(GetValidCategoryName(),GetValidCategoryDescription());
 }

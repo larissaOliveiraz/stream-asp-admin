@@ -1,15 +1,15 @@
 ﻿using Lm.Streamthis.Catalog.Application.UseCases.Category.ListCategories;
-using Lm.Streamthis.Catalog.Domain.Entities;
+using DomainEntities = Lm.Streamthis.Catalog.Domain.Entities;
 using Lm.Streamthis.Catalog.Domain.SeedWork.SearchableRepository;
-using Lm.Streamthis.Catalog.UnitTests.Application.Common;
+using Lm.Streamthis.Catalog.UnitTests.Application.Category.Common;
 
-namespace Lm.Streamthis.Catalog.UnitTests.Application.ListCategories;
+namespace Lm.Streamthis.Catalog.UnitTests.Application.Category.ListCategories;
 
 public class ListCategoriesFixture : CategoryBaseFixture
 {
-    public List<Category> GetValidCategoryList(int? length = 15)
+    public List<DomainEntities.Category> GetValidCategoryList(int? length = 15)
     {
-        var categoryList = new List<Category>();
+        var categoryList = new List<DomainEntities.Category>();
         
         for (var i = 0; i < length; i++)
             categoryList.Add(GetValidCategory());

@@ -1,11 +1,10 @@
-﻿using System.Globalization;
-using FluentAssertions;
+﻿using FluentAssertions;
 using Lm.Streamthis.Catalog.Application.Exceptions;
-using Moq;
 using Lm.Streamthis.Catalog.Application.UseCases.Category.GetCategory;
+using Moq;
 using UseCase = Lm.Streamthis.Catalog.Application.UseCases.Category.GetCategory;
 
-namespace Lm.Streamthis.Catalog.UnitTests.Application.GetCategory;
+namespace Lm.Streamthis.Catalog.UnitTests.Application.Category.GetCategory;
 
 [Collection(nameof(GetCategoryFixture))]
 public class GetCategoryTest(GetCategoryFixture fixture)

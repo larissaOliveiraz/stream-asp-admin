@@ -1,11 +1,11 @@
 ﻿using FluentAssertions;
 using Moq;
-using Lm.Streamthis.Catalog.Domain.Entities;
+using DomainEntities = Lm.Streamthis.Catalog.Domain.Entities;
 using Lm.Streamthis.Catalog.Domain.SeedWork.SearchableRepository;
 using Lm.Streamthis.Catalog.Application.UseCases.Category.ListCategories;
 using UseCase = Lm.Streamthis.Catalog.Application.UseCases.Category.ListCategories;
 
-namespace Lm.Streamthis.Catalog.UnitTests.Application.ListCategories;
+namespace Lm.Streamthis.Catalog.UnitTests.Application.Category.ListCategories;
 
 [Collection(nameof(ListCategoriesFixture))]
 public class ListCategoriesTest(ListCategoriesFixture fixture)
@@ -19,7 +19,7 @@ public class ListCategoriesTest(ListCategoriesFixture fixture)
 
         var request = fixture.GetValidRequest();
 
-        var searchResponse = new SearchResponse<Category>(
+        var searchResponse = new SearchResponse<DomainEntities.Category>(
             request.Page,
             request.PerPage,
             categoryList,
@@ -78,7 +78,7 @@ public class ListCategoriesTest(ListCategoriesFixture fixture)
         var repositoryMock = fixture.GetMockRepository();
         var categoryList = fixture.GetValidCategoryList();
 
-        var searchResponse = new SearchResponse<Category>(
+        var searchResponse = new SearchResponse<DomainEntities.Category>(
             request.Page,
             request.PerPage,
             categoryList,
@@ -133,7 +133,7 @@ public class ListCategoriesTest(ListCategoriesFixture fixture)
         var repositoryMock = fixture.GetMockRepository();
         var request = fixture.GetValidRequest();
 
-        var searchResponse = new SearchResponse<Category>(
+        var searchResponse = new SearchResponse<DomainEntities.Category>(
             request.Page,
             request.PerPage,
             [],

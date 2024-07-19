@@ -1,10 +1,10 @@
 ﻿using FluentAssertions;
 using Lm.Streamthis.Catalog.Application.Exceptions;
-using Moq;
 using Lm.Streamthis.Catalog.Application.UseCases.Category.DeleteCategory;
+using Moq;
 using UseCase = Lm.Streamthis.Catalog.Application.UseCases.Category.DeleteCategory;
 
-namespace Lm.Streamthis.Catalog.UnitTests.Application.DeleteCategory;
+namespace Lm.Streamthis.Catalog.UnitTests.Application.Category.DeleteCategory;
 
 [Collection(nameof(DeleteCategoryFixture))]
 public class DeleteCategoryTest(DeleteCategoryFixture fixture)

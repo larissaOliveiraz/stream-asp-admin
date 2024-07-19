@@ -1,6 +1,6 @@
 ﻿using Lm.Streamthis.Catalog.Application.UseCases.Category.ListCategories;
 
-namespace Lm.Streamthis.Catalog.UnitTests.Application.ListCategories;
+namespace Lm.Streamthis.Catalog.UnitTests.Application.Category.ListCategories;
 
 public class ListCategoriesDataGenerator
 {
@@ -19,7 +19,8 @@ public class ListCategoriesDataGenerator
                 2 => [new ListCategoriesRequest(request.Page, request.PerPage)],
                 3 => [new ListCategoriesRequest(request.Page, request.PerPage, request.Search)],
                 4 => [new ListCategoriesRequest(request.Page, request.PerPage, request.Search, request.Sort)],
-                5 => [request]
+                5 => [request],
+                _ => [new ListCategoriesRequest()]
             };
         }
     }

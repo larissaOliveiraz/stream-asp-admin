@@ -1,7 +1,7 @@
 ﻿using Lm.Streamthis.Catalog.Application.UseCases.Category.UpdateCategory;
-using Lm.Streamthis.Catalog.UnitTests.Application.Common;
+using Lm.Streamthis.Catalog.UnitTests.Application.Category.Common;
 
-namespace Lm.Streamthis.Catalog.UnitTests.Application.UpdateCategory;
+namespace Lm.Streamthis.Catalog.UnitTests.Application.Category.UpdateCategory;
 
 public class UpdateCategoryFixture : CategoryBaseFixture
 {

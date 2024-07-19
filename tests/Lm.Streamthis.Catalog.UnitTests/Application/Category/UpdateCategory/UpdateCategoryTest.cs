@@ -1,12 +1,12 @@
-﻿using Moq;
-using FluentAssertions;
+﻿using FluentAssertions;
 using Lm.Streamthis.Catalog.Application.Exceptions;
 using Lm.Streamthis.Catalog.Application.UseCases.Category.UpdateCategory;
-using Lm.Streamthis.Catalog.Domain.Entities;
 using Lm.Streamthis.Catalog.Domain.Exceptions;
+using Moq;
 using UseCase = Lm.Streamthis.Catalog.Application.UseCases.Category.UpdateCategory;
+using DomainEntities = Lm.Streamthis.Catalog.Domain.Entities;
 
-namespace Lm.Streamthis.Catalog.UnitTests.Application.UpdateCategory;
+namespace Lm.Streamthis.Catalog.UnitTests.Application.Category.UpdateCategory;
 
 [Collection(nameof(UpdateCategoryFixture))]
 public class UpdateCategoryTest(UpdateCategoryFixture fixture)
@@ -17,7 +17,7 @@ public class UpdateCategoryTest(UpdateCategoryFixture fixture)
         nameof(UpdateCategoryDataGenerator.GetValidCategoriesToUpdate),
         parameters: 10,
         MemberType = typeof(UpdateCategoryDataGenerator))]
-    public async void Should_Update_Category(Category category, UpdateCategoryRequest request)
+    public async void Should_Update_Category(DomainEntities.Category category, UpdateCategoryRequest request)
     {
         var repositoryMock = fixture.GetMockRepository();
         var unitOfWork = fixture.GetMockUnitOfWork();
@@ -51,7 +51,7 @@ public class UpdateCategoryTest(UpdateCategoryFixture fixture)
         nameof(UpdateCategoryDataGenerator.GetValidCategoriesToUpdate),
         parameters: 10,
         MemberType = typeof(UpdateCategoryDataGenerator))]
-    public async void Should_Update_Only_With_Name(Category category, UpdateCategoryRequest request)
+    public async void Should_Update_Only_With_Name(DomainEntities.Category category, UpdateCategoryRequest request)
     {
         var repositoryMock = fixture.GetMockRepository();
         var unitOfWork = fixture.GetMockUnitOfWork();
@@ -89,7 +89,9 @@ public class UpdateCategoryTest(UpdateCategoryFixture fixture)
         nameof(UpdateCategoryDataGenerator.GetValidCategoriesToUpdate),
         parameters: 10,
         MemberType = typeof(UpdateCategoryDataGenerator))]
-    public async Task Should_Update_Category_Without_IsActive(Category category, UpdateCategoryRequest request)
+    public async Task Should_Update_Category_Without_IsActive(
+        DomainEntities.Category category,
+        UpdateCategoryRequest request)
     {
         var repositoryMock = fixture.GetMockRepository();
         var unitOfWork = fixture.GetMockUnitOfWork();
