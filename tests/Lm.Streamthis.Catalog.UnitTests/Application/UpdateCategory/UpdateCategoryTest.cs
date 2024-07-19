@@ -129,7 +129,7 @@ public class UpdateCategoryTest(UpdateCategoryFixture fixture)
         var repositoryMock = fixture.GetMockRepository();
         var unitOfWork = fixture.GetMockUnitOfWork();
 
-        var request = fixture.GetValidRequest();
+        var request = fixture.GetRequest();
         repositoryMock
             .Setup(x =>
                 x.Get(request.Id, It.IsAny<CancellationToken>()))

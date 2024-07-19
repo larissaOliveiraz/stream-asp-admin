@@ -10,7 +10,7 @@ public class UpdateCategoryRequestValidatorTest(UpdateCategoryFixture fixture)
     [Trait("Application", "Update Category Request Validator")]
     public void Should_Validate_Request()
     {
-        var request = fixture.GetValidRequest();
+        var request = fixture.GetRequest();
 
         var validator = new UpdateCategoryRequestValidator();
 
@@ -25,7 +25,7 @@ public class UpdateCategoryRequestValidatorTest(UpdateCategoryFixture fixture)
     [Trait("Application", "Update Category Request Validator")]
     public void Should_Throw_Exception_When_Request_IsInvalid()
     {
-        var requestWithInvalidId = fixture.GetValidRequest(Guid.Empty);
+        var requestWithInvalidId = fixture.GetRequest(Guid.Empty);
 
         var validator = new UpdateCategoryRequestValidator();
 

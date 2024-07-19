@@ -11,7 +11,7 @@ public class GetCategoryRequestValidatorTest(GetCategoryFixture fixture)
     public void Should_Validate_Request()
     {
         var validId = Guid.NewGuid();
-        var validRequest = new GetCategoryRequest(validId);
+        var validRequest = fixture.GetRequest(validId);
 
         var validator = new GetCategoryRequestValidator();
 
@@ -27,7 +27,7 @@ public class GetCategoryRequestValidatorTest(GetCategoryFixture fixture)
     public void Should_Throw_Exception_When_Request_IsInvalid()
     {
         var invalidId = Guid.Empty;
-        var invalidRequest = new GetCategoryRequest(invalidId);
+        var invalidRequest = fixture.GetRequest(invalidId);
 
         var validator = new GetCategoryRequestValidator();
 

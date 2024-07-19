@@ -1,6 +1,4 @@
-﻿using Lm.Streamthis.Catalog.Application.UseCases.Category.UpdateCategory;
-
-namespace Lm.Streamthis.Catalog.UnitTests.Application.UpdateCategory;
+﻿namespace Lm.Streamthis.Catalog.UnitTests.Application.UpdateCategory;
 
 public class UpdateCategoryDataGenerator
 {
@@ -12,7 +10,7 @@ public class UpdateCategoryDataGenerator
         {
             var validCategory = fixture.GetValidCategory();
             
-            var validRequest = fixture.GetValidRequest(validCategory.Id);
+            var validRequest = fixture.GetRequest(validCategory.Id);
 
             yield return [validCategory, validRequest];
         }
