@@ -23,4 +23,9 @@
         <Using Include="Xunit"/>
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\..\src\Lm.Streamthis.Catalog.Domain\Lm.Streamthis.Catalog.Domain.csproj" />
+      <ProjectReference Include="..\..\src\Lm.Streamthis.Catalog.Infra\Lm.Streamthis.Catalog.Infra.csproj" />
+    </ItemGroup>
+
 </Project>

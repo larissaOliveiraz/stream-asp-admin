@@ -38,5 +38,5 @@ public class CategoryBaseFixture : BaseFixture
     protected static bool GetRandomBoolean() => new Random().NextDouble() < 0.5;
     
     public DomainEntities.Category GetValidCategory() =>
-        new(GetValidCategoryName(),GetValidCategoryDescription());
+        new(GetValidCategoryName(),GetValidCategoryDescription(), GetRandomBoolean());
 }
