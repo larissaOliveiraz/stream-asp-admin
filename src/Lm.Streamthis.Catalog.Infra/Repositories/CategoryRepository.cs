@@ -12,10 +12,8 @@ public class CategoryRepository(StreamAspDbContext context) : ICategoryRepositor
     public async Task Insert(Category category, CancellationToken cancellationToken) =>
         await Categories.AddAsync(category, cancellationToken);
 
-    public Task<Category> Get(Guid id, CancellationToken cancellationToken)
-    {
-        throw new NotImplementedException();
-    }
+    public async Task<Category> Get(Guid id, CancellationToken cancellationToken) =>
+        await Categories.FindAsync([id], cancellationToken);
 
     public Task<SearchResponse<Category>> Search(SearchRequest searchRequest, CancellationToken cancellationToken)
     {
