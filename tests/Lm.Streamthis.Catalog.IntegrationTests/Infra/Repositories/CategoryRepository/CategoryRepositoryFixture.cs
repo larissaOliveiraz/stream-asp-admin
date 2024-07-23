@@ -35,6 +35,10 @@ public class CategoryRepositoryFixture : BaseFixture
     public Category GetValidCategory() =>
         new(GetValidCategoryName(),GetValidCategoryDescription(), GetRandomBoolean());
 
+
+    public List<Category> GetValidCategoryList(int length) =>
+        Enumerable.Range(0, length).Select(_ => GetValidCategory()).ToList();
+
     public StreamAspDbContext CreateDbContext()
     {
         var dbContext = new StreamAspDbContext(
