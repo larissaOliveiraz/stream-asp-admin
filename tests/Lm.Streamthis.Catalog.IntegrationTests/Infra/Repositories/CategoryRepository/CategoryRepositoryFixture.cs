@@ -39,7 +39,7 @@ public class CategoryRepositoryFixture : BaseFixture
     public List<Category> GetValidCategoryList(int length) =>
         Enumerable.Range(0, length).Select(_ => GetValidCategory()).ToList();
 
-    public StreamAspDbContext CreateDbContext()
+    public StreamAspDbContext CreateDbContext(bool preserveData = false)
     {
         var dbContext = new StreamAspDbContext(
             new DbContextOptionsBuilder<StreamAspDbContext>()
@@ -47,8 +47,10 @@ public class CategoryRepositoryFixture : BaseFixture
                 .Options
         );
 
+        if (preserveData == false)
+            dbContext.Database.EnsureDeleted();
+
         return dbContext;
-        
     }
 }
 

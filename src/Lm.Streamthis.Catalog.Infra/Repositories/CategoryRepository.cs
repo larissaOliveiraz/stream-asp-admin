@@ -24,7 +24,15 @@ public class CategoryRepository(StreamAspDbContext context) : ICategoryRepositor
     public Task Delete(Category category, CancellationToken _) => 
         Task.FromResult(Categories.Remove(category));
 
-    public Task<SearchResponse<Category>> Search(SearchRequest searchRequest, CancellationToken cancellationToken) => 
-        throw new NotImplementedException();
+    public async Task<SearchResponse<Category>> Search(SearchRequest searchRequest, CancellationToken cancellationToken)
+    {
+        var items = await Categories.ToListAsync(cancellationToken);
+        var total = await Categories.CountAsync(cancellationToken);
 
+        return new SearchResponse<Category>(
+            searchRequest.Page,
+            searchRequest.PerPage,
+            items,
+            total);
+    }
 }

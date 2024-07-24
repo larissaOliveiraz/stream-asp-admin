@@ -1,5 +1,6 @@
 ﻿using FluentAssertions;
 using Lm.Streamthis.Catalog.Application.Exceptions;
+using Lm.Streamthis.Catalog.Domain.SeedWork.SearchableRepository;
 using System.Reflection;
 using Repository = Lm.Streamthis.Catalog.Infra.Repositories;
 
@@ -19,7 +20,7 @@ public class CategoryRepositoryTest(CategoryRepositoryFixture fixture)
         await categoryRepository.Insert(validCategory, CancellationToken.None);
         await dbContext.SaveChangesAsync(CancellationToken.None);
 
-        var insertedCategory = await (fixture.CreateDbContext()).Categories().FindAsync(validCategory.Id);
+        var insertedCategory = await (fixture.CreateDbContext(true)).Categories().FindAsync(validCategory.Id);
 
         insertedCategory.Should().NotBeNull();
         insertedCategory.Name.Should().Be(validCategory.Name);
@@ -41,7 +42,7 @@ public class CategoryRepositoryTest(CategoryRepositoryFixture fixture)
         await dbContext.AddRangeAsync(validCategoryList);
         await dbContext.SaveChangesAsync(CancellationToken.None);
 
-        var categoryRepository = new Repository.CategoryRepository(fixture.CreateDbContext());
+        var categoryRepository = new Repository.CategoryRepository(fixture.CreateDbContext(true));
 
         var selectedCategory = await categoryRepository.Get(validCategory.Id, CancellationToken.None);
 
@@ -53,7 +54,7 @@ public class CategoryRepositoryTest(CategoryRepositoryFixture fixture)
         selectedCategory.CreatedAt.Should().Be(validCategory.CreatedAt);
     }
 
-    [Fact(DisplayName =nameof(Should_Throw_Exception_When_Category_Not_Found))]
+    [Fact(DisplayName = nameof(Should_Throw_Exception_When_Category_Not_Found))]
     [Trait("Infra", "Category Repository")]
     public async void Should_Throw_Exception_When_Category_Not_Found()
     {
@@ -93,7 +94,7 @@ public class CategoryRepositoryTest(CategoryRepositoryFixture fixture)
         await categoryRepository.Update(category, CancellationToken.None);
         await dbContext.SaveChangesAsync(CancellationToken.None);
 
-        var updatedCategory = await (fixture.CreateDbContext()).Categories().FindAsync(category.Id);
+        var updatedCategory = await (fixture.CreateDbContext(true)).Categories().FindAsync(category.Id);
 
         updatedCategory.Should().NotBeNull();
         updatedCategory.Name.Should().Be(newCategory.Name);
@@ -120,4 +121,37 @@ public class CategoryRepositoryTest(CategoryRepositoryFixture fixture)
 
         deletedCategory.Should().BeNull();
     }
+
+    [Fact(DisplayName = nameof(Should_Search_Category_Return_List_And_Total))]
+    [Trait("Infra", "Category Repository")]
+    public async void Should_Search_Category_Return_List_And_Total()
+    {
+        var dbContext = fixture.CreateDbContext();
+        var categoryList = fixture.GetValidCategoryList(15);
+        var category = fixture.GetValidCategory();
+        categoryList.Add(category);
+
+        var searchRequest = new SearchRequest(1, 20, "", "", SearchOrder.Asc);
+
+        await dbContext.AddRangeAsync(categoryList);
+        await dbContext.SaveChangesAsync(CancellationToken.None);
+
+        var categoryRepository = new Repository.CategoryRepository(dbContext);
+        var searchedCategory = await categoryRepository.Search(searchRequest, CancellationToken.None);
+
+        searchedCategory.Should().NotBeNull();
+        searchedCategory.CurrentPage.Should().Be(searchRequest.Page);
+        searchedCategory.PerPage.Should().Be(searchRequest.PerPage);
+        searchedCategory.Total.Should().Be(categoryList.Count);
+        searchedCategory.Items.Should().HaveCount(categoryList.Count);
+        searchedCategory.Items.ForEach(item =>
+        {
+            var category = categoryList.Find(category => category.Id == item.Id);
+            category.Should().NotBeNull();
+            category.Name.Should().Be(item.Name);
+            category.Description.Should().Be(item.Description);
+            category.IsActive.Should().Be(item.IsActive);
+            category.CreatedAt.Should().Be(item.CreatedAt);
+        });
+     }
 }
