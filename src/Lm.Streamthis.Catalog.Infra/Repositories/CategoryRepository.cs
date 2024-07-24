@@ -18,12 +18,13 @@ public class CategoryRepository(StreamAspDbContext context) : ICategoryRepositor
             .FirstOrDefaultAsync(x => x.Id == id, cancellationToken) ?? 
         throw new NotFoundException($"Category with id '{id}' was not found.");
 
-    public Task Update(Category category, CancellationToken cancellationToken) =>
+    public Task Update(Category category, CancellationToken _) =>
         Task.FromResult(Categories.Update(category));
+
+    public Task Delete(Category category, CancellationToken _) => 
+        Task.FromResult(Categories.Remove(category));
 
     public Task<SearchResponse<Category>> Search(SearchRequest searchRequest, CancellationToken cancellationToken) => 
         throw new NotImplementedException();
 
-    public Task Delete(Category aggregate, CancellationToken cancellationToken) => 
-        throw new NotImplementedException();
 }

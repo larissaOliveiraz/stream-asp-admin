@@ -99,4 +99,25 @@ public class CategoryRepositoryTest(CategoryRepositoryFixture fixture)
         updatedCategory.Name.Should().Be(newCategory.Name);
         updatedCategory.Description.Should().Be(newCategory.Description);
     }
+
+    [Fact(DisplayName = nameof(Should_Delete_Category))]
+    [Trait("Infra", "Category Repository")]
+    public async void Should_Delete_Category()
+    {
+        var dbContext = fixture.CreateDbContext();
+        var categoryList = fixture.GetValidCategoryList(15);
+        var category = fixture.GetValidCategory();
+        categoryList.Add(category);
+
+        await dbContext.AddRangeAsync(categoryList);
+        await dbContext.SaveChangesAsync();
+
+        var categoryRepository = new Repository.CategoryRepository(dbContext);
+        await categoryRepository.Delete(category, CancellationToken.None);
+        await dbContext.SaveChangesAsync();
+
+        var deletedCategory = await fixture.CreateDbContext().Categories().FindAsync(category.Id);
+
+        deletedCategory.Should().BeNull();
+    }
 }
