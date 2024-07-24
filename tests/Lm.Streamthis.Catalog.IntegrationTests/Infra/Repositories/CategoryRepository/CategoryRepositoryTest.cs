@@ -1,5 +1,5 @@
 ﻿using FluentAssertions;
-using Lm.Streamthis.Catalog.Infra;
+using Lm.Streamthis.Catalog.Application.Exceptions;
 using Repository = Lm.Streamthis.Catalog.Infra.Repositories;
 
 namespace Lm.Streamthis.Catalog.IntegrationTests.Infra.Repositories.CategoryRepository;
@@ -50,5 +50,25 @@ public class CategoryRepositoryTest(CategoryRepositoryFixture fixture)
         selectedCategory.Description.Should().Be(validCategory.Description);
         selectedCategory.IsActive.Should().Be(validCategory.IsActive);
         selectedCategory.CreatedAt.Should().Be(validCategory.CreatedAt);
+    }
+
+    [Fact(DisplayName =nameof(Should_Throw_Exception_When_Category_Not_Found))]
+    [Trait("Infra", "Category Repository")]
+    public async void Should_Throw_Exception_When_Category_Not_Found()
+    {
+        var dbContext = fixture.CreateDbContext();
+        var randomId = Guid.NewGuid();
+
+        await dbContext.AddRangeAsync(fixture.GetValidCategoryList(15));
+        await dbContext.SaveChangesAsync(CancellationToken.None);
+
+        var categoryRepository = new Repository.CategoryRepository(dbContext);
+
+        var action = async () => 
+            await categoryRepository.Get(randomId, CancellationToken.None);
+
+        await action.Should()
+            .ThrowAsync<NotFoundException>()
+            .WithMessage($"Category with id '{randomId}' was not found.");
     }
 }

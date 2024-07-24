@@ -1,4 +1,5 @@
-﻿using Lm.Streamthis.Catalog.Domain.Entities;
+﻿using Lm.Streamthis.Catalog.Application.Exceptions;
+using Lm.Streamthis.Catalog.Domain.Entities;
 using Lm.Streamthis.Catalog.Domain.Repositories;
 using Lm.Streamthis.Catalog.Domain.SeedWork.SearchableRepository;
 using Microsoft.EntityFrameworkCore;
@@ -12,8 +13,14 @@ public class CategoryRepository(StreamAspDbContext context) : ICategoryRepositor
     public async Task Insert(Category category, CancellationToken cancellationToken) =>
         await Categories.AddAsync(category, cancellationToken);
 
-    public async Task<Category> Get(Guid id, CancellationToken cancellationToken) =>
-        await Categories.FindAsync([id], cancellationToken);
+    public async Task<Category> Get(Guid id, CancellationToken cancellationToken)
+    {
+        var category = await Categories.FindAsync([id], cancellationToken);
+
+        return category ?? 
+            throw new NotFoundException($"Category with id '{id}' was not found.");
+    }
+
 
     public Task<SearchResponse<Category>> Search(SearchRequest searchRequest, CancellationToken cancellationToken)
     {
