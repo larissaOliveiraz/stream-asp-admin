@@ -1,5 +1,6 @@
 ﻿using FluentAssertions;
 using Lm.Streamthis.Catalog.Application.Exceptions;
+using System.Reflection;
 using Repository = Lm.Streamthis.Catalog.Infra.Repositories;
 
 namespace Lm.Streamthis.Catalog.IntegrationTests.Infra.Repositories.CategoryRepository;
@@ -18,7 +19,7 @@ public class CategoryRepositoryTest(CategoryRepositoryFixture fixture)
         await categoryRepository.Insert(validCategory, CancellationToken.None);
         await dbContext.SaveChangesAsync(CancellationToken.None);
 
-        var insertedCategory = await dbContext.Categories().FindAsync(validCategory.Id);
+        var insertedCategory = await (fixture.CreateDbContext()).Categories().FindAsync(validCategory.Id);
 
         insertedCategory.Should().NotBeNull();
         insertedCategory.Name.Should().Be(validCategory.Name);
@@ -40,7 +41,7 @@ public class CategoryRepositoryTest(CategoryRepositoryFixture fixture)
         await dbContext.AddRangeAsync(validCategoryList);
         await dbContext.SaveChangesAsync(CancellationToken.None);
 
-        var categoryRepository = new Repository.CategoryRepository(dbContext);
+        var categoryRepository = new Repository.CategoryRepository(fixture.CreateDbContext());
 
         var selectedCategory = await categoryRepository.Get(validCategory.Id, CancellationToken.None);
 
@@ -70,5 +71,32 @@ public class CategoryRepositoryTest(CategoryRepositoryFixture fixture)
         await action.Should()
             .ThrowAsync<NotFoundException>()
             .WithMessage($"Category with id '{randomId}' was not found.");
+    }
+
+    [Fact(DisplayName = nameof(Should_Update_Category))]
+    [Trait("Infra", "Category Repository")]
+    public async void Should_Update_Category()
+    {
+        var dbContext = fixture.CreateDbContext();
+        var categoryList = fixture.GetValidCategoryList(15);
+        var category = fixture.GetValidCategory();
+        categoryList.Add(category);
+
+        await dbContext.AddRangeAsync(categoryList);
+        await dbContext.SaveChangesAsync(CancellationToken.None);
+
+        var newCategory = fixture.GetValidCategory();
+
+        category.Update(newCategory.Name, newCategory.Description);
+
+        var categoryRepository = new Repository.CategoryRepository(dbContext);
+        await categoryRepository.Update(category, CancellationToken.None);
+        await dbContext.SaveChangesAsync(CancellationToken.None);
+
+        var updatedCategory = await (fixture.CreateDbContext()).Categories().FindAsync(category.Id);
+
+        updatedCategory.Should().NotBeNull();
+        updatedCategory.Name.Should().Be(newCategory.Name);
+        updatedCategory.Description.Should().Be(newCategory.Description);
     }
 }
