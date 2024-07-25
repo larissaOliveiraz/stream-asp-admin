@@ -66,7 +66,7 @@ public class CategoryRepositoryTest(CategoryRepositoryFixture fixture)
 
         var categoryRepository = new Repository.CategoryRepository(dbContext);
 
-        var action = async () => 
+        var action = async () =>
             await categoryRepository.Get(randomId, CancellationToken.None);
 
         await action.Should()
@@ -153,14 +153,14 @@ public class CategoryRepositoryTest(CategoryRepositoryFixture fixture)
             category.IsActive.Should().Be(item.IsActive);
             category.CreatedAt.Should().Be(item.CreatedAt);
         });
-     }
+    }
 
     [Fact(DisplayName = nameof(Should_Return_Empty_List_When_Search_HasNoItems))]
     [Trait("Infra", "Category Repository")]
     public async void Should_Return_Empty_List_When_Search_HasNoItems()
     {
         var dbContext = fixture.CreateDbContext();
-        
+
         var categoryRepository = new Repository.CategoryRepository(dbContext);
         var searchRequest = new SearchRequest(1, 20, "", "", SearchOrder.Asc);
 
@@ -172,5 +172,41 @@ public class CategoryRepositoryTest(CategoryRepositoryFixture fixture)
         searchResponse.Total.Should().Be(0);
         searchResponse.CurrentPage.Should().Be(searchRequest.Page);
         searchResponse.PerPage.Should().Be(searchRequest.PerPage);
+    }
+
+    [Theory(DisplayName = nameof(Should_Return_Search_Results_Paginated))]
+    [Trait("Infra", "Category Repository")]
+    [InlineData(20, 1, 10, 10)]
+    [InlineData(20, 2, 10, 10)]
+    [InlineData(7, 2, 5, 2)]
+    [InlineData(7, 3, 5, 0)]
+    public async void Should_Return_Search_Results_Paginated(
+        int categoriesAmount, int page, int perPage, int expectedItemsInCurrentPage)
+    {
+        var dbContext = fixture.CreateDbContext();
+        var categoryList = fixture.GetValidCategoryList(categoriesAmount);
+
+        await dbContext.AddRangeAsync(categoryList);
+        await dbContext.SaveChangesAsync(CancellationToken.None);
+
+        var searchRequest = new SearchRequest(page, perPage, "", "", SearchOrder.Asc);
+
+        var categoryRepository = new Repository.CategoryRepository(dbContext);
+        var searchResponse = await categoryRepository.Search(searchRequest, CancellationToken.None);
+
+        searchResponse.Should().NotBeNull();
+        searchResponse.Items.Should().HaveCount(expectedItemsInCurrentPage);
+        searchResponse.Total.Should().Be(categoriesAmount);
+        searchResponse.CurrentPage.Should().Be(page);
+        searchResponse.PerPage.Should().Be(perPage);
+        searchResponse.Items.ForEach(async item =>
+        {
+            var category = await dbContext.Categories().FindAsync(item.Id);
+            category.Should().NotBeNull();
+            item.Name.Should().Be(category.Name);
+            item.Description.Should().Be(category.Description);
+            item.IsActive.Should().Be(category.IsActive);
+            item.CreatedAt.Should().Be(category.CreatedAt);
+        });
     }
 }
