@@ -15,24 +15,28 @@ public class CategoryRepository(StreamAspDbContext context) : ICategoryRepositor
 
     public async Task<Category> Get(Guid id, CancellationToken cancellationToken) =>
         await Categories.AsNoTracking()
-            .FirstOrDefaultAsync(x => x.Id == id, cancellationToken) ?? 
+            .FirstOrDefaultAsync(x => x.Id == id, cancellationToken) ??
         throw new NotFoundException($"Category with id '{id}' was not found.");
 
     public Task Update(Category category, CancellationToken _) =>
         Task.FromResult(Categories.Update(category));
 
-    public Task Delete(Category category, CancellationToken _) => 
+    public Task Delete(Category category, CancellationToken _) =>
         Task.FromResult(Categories.Remove(category));
 
-    public async Task<SearchResponse<Category>> Search(SearchRequest searchRequest, CancellationToken cancellationToken)
+    public async Task<SearchResponse<Category>> Search(SearchRequest request, CancellationToken cancellationToken)
     {
-        var items = await Categories.ToListAsync(cancellationToken);
+        var skipAmount = (request.Page - 1) * request.PerPage;
+
+        var items = await Categories
+            .Skip(skipAmount)
+            .Take(request.PerPage)
+            .ToListAsync(cancellationToken);
         var total = await Categories.CountAsync(cancellationToken);
 
         return new SearchResponse<Category>(
-            searchRequest.Page,
-            searchRequest.PerPage,
-            items,
-            total);
+            request.Page,
+            request.PerPage,
+            items, total);
     }
 }
