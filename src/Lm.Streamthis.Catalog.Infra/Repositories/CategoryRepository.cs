@@ -28,11 +28,15 @@ public class CategoryRepository(StreamAspDbContext context) : ICategoryRepositor
     {
         var skipAmount = (request.Page - 1) * request.PerPage;
 
-        var items = await Categories
+        var query = Categories.AsNoTracking();
+        if (!string.IsNullOrWhiteSpace(request.Search))
+            query = query.Where(x => x.Name.Contains(request.Search));
+
+        var items = await query
             .Skip(skipAmount)
             .Take(request.PerPage)
             .ToListAsync(cancellationToken);
-        var total = await Categories.CountAsync(cancellationToken);
+        var total = await query.CountAsync(cancellationToken);
 
         return new SearchResponse<Category>(
             request.Page,
