@@ -1,5 +1,6 @@
 ﻿using FluentAssertions;
 using Lm.Streamthis.Catalog.Application.Exceptions;
+using Lm.Streamthis.Catalog.Domain.Entities;
 using Lm.Streamthis.Catalog.Domain.SeedWork.SearchableRepository;
 using System.Reflection;
 using Repository = Lm.Streamthis.Catalog.Infra.Repositories;
@@ -247,5 +248,41 @@ public class CategoryRepositoryTest(CategoryRepositoryFixture fixture)
             item.IsActive.Should().Be(category.IsActive);
             item.CreatedAt.Should().Be(category.CreatedAt);
         });
+    }
+
+    [Theory(DisplayName = nameof(Should_Return_Search_Results_Ordered))]
+    [Trait("Infra", "Category Repository")]
+    [InlineData("name", SearchOrder.Asc)]
+    [InlineData("name", SearchOrder.Desc)]
+    [InlineData("id", SearchOrder.Asc)]
+    [InlineData("id", SearchOrder.Desc)]
+    [InlineData("createdAt", SearchOrder.Asc)]
+    [InlineData("createdAt", SearchOrder.Desc)]
+    [InlineData("", SearchOrder.Asc)]
+    public async void Should_Return_Search_Results_Ordered(string orderBy, SearchOrder order)
+    {
+        var dbContext = fixture.CreateDbContext();
+        var categoriesList = fixture.GetValidCategoryList(20);
+
+        await dbContext.AddRangeAsync(categoriesList);
+        await dbContext.SaveChangesAsync();
+
+        var searchRequest = new SearchRequest(1, 20, "", orderBy, order);
+        var categoryRepository = new Repository.CategoryRepository(dbContext);
+
+        var searchedCategories = await categoryRepository.Search(searchRequest, CancellationToken.None);
+
+        searchedCategories.Should().NotBeNull();
+        var orderFunctions = new Dictionary<(string, SearchOrder), Action<IEnumerable<Category>>>
+        {
+            { ("name", SearchOrder.Asc), categories => categories.Should().BeInAscendingOrder(x => x.Name) },
+            { ("name", SearchOrder.Desc), categories => categories.Should().BeInDescendingOrder(x => x.Name) },
+            { ("id", SearchOrder.Asc), categories => categories.Should().BeInAscendingOrder(x => x.Id) },
+            { ("id", SearchOrder.Desc), categories => categories.Should().BeInDescendingOrder(x => x.Id) },
+            { ("createdAt", SearchOrder.Asc), categories => categories.Should().BeInAscendingOrder(x => x.CreatedAt) },
+            { ("createdAt", SearchOrder.Desc), categories => categories.Should().BeInDescendingOrder(x => x.CreatedAt) },
+            { ("", SearchOrder.Asc), categories => categories.Should().BeInAscendingOrder(x => x.Name) },
+        };
+        orderFunctions[(orderBy, order)](searchedCategories.Items);
     }
 }
