@@ -29,8 +29,11 @@ public class CategoryRepository(StreamAspDbContext context) : ICategoryRepositor
         var skipAmount = (request.Page - 1) * request.PerPage;
 
         var query = Categories.AsNoTracking();
+
         if (!string.IsNullOrWhiteSpace(request.Search))
             query = query.Where(x => x.Name.Contains(request.Search));
+
+        query = OrderQuery(query, request.OrderBy, request.Order);
 
         var items = await query
             .Skip(skipAmount)
@@ -43,4 +46,17 @@ public class CategoryRepository(StreamAspDbContext context) : ICategoryRepositor
             request.PerPage,
             items, total);
     }
+
+    private IQueryable<Category> OrderQuery(
+        IQueryable<Category> query, string orderBy, SearchOrder order) =>
+        (orderBy, order) switch
+        {
+            ("name", SearchOrder.Asc) => query.OrderBy(x => x.Name),
+            ("name", SearchOrder.Desc) => query.OrderByDescending(x => x.Name),
+            ("id", SearchOrder.Asc) => query.OrderBy(x => x.Id),
+            ("id", SearchOrder.Desc) => query.OrderByDescending(x => x.Id),
+            ("createdAt", SearchOrder.Asc) => query.OrderBy(x => x.CreatedAt),
+            ("createdAt", SearchOrder.Desc) => query.OrderByDescending(x => x.CreatedAt),
+            _ => query.OrderBy(x => x.Name)
+        };
 }
