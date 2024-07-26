@@ -181,7 +181,7 @@ public class CategoryRepositoryTest(CategoryRepositoryFixture fixture)
     [InlineData(7, 2, 5, 2)]
     [InlineData(7, 3, 5, 0)]
     public async void Should_Return_Search_Results_Paginated(
-        int categoriesAmount, int page, int perPage, int expectedItemsInCurrentPage)
+        int categoriesAmount, int currentPage, int perPage, int expectedItemsInCurrentPage)
     {
         var dbContext = fixture.CreateDbContext();
         var categoryList = fixture.GetValidCategoryList(categoriesAmount);
@@ -189,7 +189,7 @@ public class CategoryRepositoryTest(CategoryRepositoryFixture fixture)
         await dbContext.AddRangeAsync(categoryList);
         await dbContext.SaveChangesAsync(CancellationToken.None);
 
-        var searchRequest = new SearchRequest(page, perPage, "", "", SearchOrder.Asc);
+        var searchRequest = new SearchRequest(currentPage, perPage, "", "", SearchOrder.Asc);
 
         var categoryRepository = new Repository.CategoryRepository(dbContext);
         var searchResponse = await categoryRepository.Search(searchRequest, CancellationToken.None);
@@ -197,9 +197,48 @@ public class CategoryRepositoryTest(CategoryRepositoryFixture fixture)
         searchResponse.Should().NotBeNull();
         searchResponse.Items.Should().HaveCount(expectedItemsInCurrentPage);
         searchResponse.Total.Should().Be(categoriesAmount);
-        searchResponse.CurrentPage.Should().Be(page);
+        searchResponse.CurrentPage.Should().Be(currentPage);
         searchResponse.PerPage.Should().Be(perPage);
         searchResponse.Items.ForEach(async item =>
+        {
+            var category = await dbContext.Categories().FindAsync(item.Id);
+            category.Should().NotBeNull();
+            item.Name.Should().Be(category.Name);
+            item.Description.Should().Be(category.Description);
+            item.IsActive.Should().Be(category.IsActive);
+            item.CreatedAt.Should().Be(category.CreatedAt);
+        });
+    }
+
+    [Theory(DisplayName = nameof(Should_Search_By_Text))]
+    [Trait("Infra", "Category Repository")]
+    [InlineData("Romance", 1, 5, 2, 2)]
+    [InlineData("Fantasy", 1, 2, 2, 3)]
+    [InlineData("Fantasy", 2, 5, 0, 3)]
+    [InlineData("Fantasy", 2, 2, 1, 3)]
+    [InlineData("Random", 1, 5, 0, 0)]
+    public async void Should_Search_By_Text(
+        string search, int currentPage, int perPage, int expectedItemsInCurrentPage, int expectedTotalItems)
+    {
+        var dbContext = fixture.CreateDbContext();
+        var categoriesList = fixture.GetCategoriesListWithName(
+            ["Fantasy", "Romance", "Sci-Fi", "Horror", "Drama", "Fantasy Romance", "Comedy", "Historical Fantasy"]);
+
+        await dbContext.AddRangeAsync(categoriesList);
+        await dbContext.SaveChangesAsync();
+
+        var searchRequest = new SearchRequest(currentPage, perPage, search, "", SearchOrder.Asc);
+
+        var categoryRepository = new Repository.CategoryRepository(dbContext);
+        var searchedCategories = await categoryRepository.Search(searchRequest, CancellationToken.None);
+
+        searchedCategories.Should().NotBeNull();
+        searchedCategories.CurrentPage.Should().Be(currentPage);
+        searchedCategories.PerPage.Should().Be(perPage);
+        searchedCategories.Total.Should().Be(expectedTotalItems);
+        searchedCategories.Items.Should().NotBeNull();
+        searchedCategories.Items.Should().HaveCount(expectedItemsInCurrentPage);
+        searchedCategories.Items.ForEach(async item =>
         {
             var category = await dbContext.Categories().FindAsync(item.Id);
             category.Should().NotBeNull();
