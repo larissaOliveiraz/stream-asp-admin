@@ -1,11 +1,9 @@
 ﻿using Lm.Streamthis.Catalog.Domain.Entities;
-using Lm.Streamthis.Catalog.Infra;
 using Lm.Streamthis.Catalog.IntegrationTests.Common;
-using Microsoft.EntityFrameworkCore;
 
-namespace Lm.Streamthis.Catalog.IntegrationTests.Infra.Repositories.CategoryRepository;
+namespace Lm.Streamthis.Catalog.IntegrationTests.Infra.UnitOfWork;
 
-public class CategoryRepositoryFixture : BaseFixture
+public class UnitOfWorkFixture : BaseFixture
 {
     private string GetValidCategoryName()
     {
@@ -38,17 +36,7 @@ public class CategoryRepositoryFixture : BaseFixture
 
     public List<Category> GetValidCategoryList(int length) =>
         Enumerable.Range(0, length).Select(_ => GetValidCategory()).ToList();
-
-    public List<Category> GetCategoriesListWithName(List<string> names) =>
-        names.Select(name =>
-        {
-            var category = GetValidCategory();
-            category.Update(name);
-            return category;
-        }).ToList();
 }
 
-[CollectionDefinition(nameof(CategoryRepositoryFixture))]
-public class CategoryRepositoryFixtureCollection : ICollectionFixture<CategoryRepositoryFixture>
-{
-}
+[CollectionDefinition(nameof(UnitOfWorkFixture))]
+public class UnitOfWorkFixtureCollection : ICollectionFixture<UnitOfWorkFixture> { }
