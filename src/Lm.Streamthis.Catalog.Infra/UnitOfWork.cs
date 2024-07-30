@@ -11,4 +11,7 @@ public class UnitOfWork(StreamAspDbContext context) : IUnitOfWork
 {
     public Task Commit(CancellationToken cancellationToken) =>
         context.SaveChangesAsync(cancellationToken);
+
+    public Task Rollback(CancellationToken cancellationToken) =>
+        Task.CompletedTask;
 }
