@@ -24,4 +24,18 @@ public class UnitOfWorkTest(UnitOfWorkFixture fixture)
         savedCategories.Should().NotBeEmpty();
         savedCategories.Should().HaveCount(categoriesList.Count);
     }
+
+    [Fact(DisplayName = nameof(Should_Rollback))]
+    [Trait("Infra", "Unit of Work")]
+    public async void Should_Rollback()
+    {
+        var dbContext = fixture.CreateDbContext();
+
+        var unitOfWork = new InfraUOW.UnitOfWork(dbContext);
+
+        var action = async () =>
+            await unitOfWork.Rollback(CancellationToken.None);
+
+        await action.Should().NotThrowAsync();
+    }
 }
