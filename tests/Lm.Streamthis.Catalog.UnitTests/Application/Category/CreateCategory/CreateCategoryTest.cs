@@ -16,20 +16,20 @@ public class CreateCategoryTest(CreateCategoryFixture fixture)
     {
         var repositoryMock = fixture.GetMockRepository();
         var unitOfWorkMock = fixture.GetMockUnitOfWork();
-        
+
         var useCase = new UseCase.CreateCategory(repositoryMock.Object, unitOfWorkMock.Object);
-        
+
         var request = fixture.GetValidRequest();
         var response = await useCase.Handle(request, CancellationToken.None);
 
         repositoryMock.Verify(repository =>
             repository.Insert(
-                It.IsAny<DomainEntities.Category>(), 
+                It.IsAny<DomainEntities.Category>(),
                 It.IsAny<CancellationToken>()
-            ), 
+            ),
             Times.Once);
         unitOfWorkMock.Verify(uow =>
-            uow.Commit(It.IsAny<CancellationToken>()), 
+            uow.Commit(It.IsAny<CancellationToken>()),
             Times.Once);
         response.Should().NotBeNull();
         response.Name.Should().Be(request.Name);
@@ -40,21 +40,21 @@ public class CreateCategoryTest(CreateCategoryFixture fixture)
     }
 
     [Fact(DisplayName = nameof(Should_Create_Category_Only_With_Name))]
-    [Trait("Application ", "Create Category")]
+    [Trait("Application", "Create Category")]
     public async void Should_Create_Category_Only_With_Name()
     {
         var repositoryMock = fixture.GetMockRepository();
         var unitOfWorkMock = fixture.GetMockUnitOfWork();
 
         var useCase = new UseCase.CreateCategory(repositoryMock.Object, unitOfWorkMock.Object);
-        
+
         var request = new CreateCategoryRequest(fixture.GetValidRequest().Name);
         var response = await useCase.Handle(request, CancellationToken.None);
 
-        repositoryMock.Verify(repository => 
+        repositoryMock.Verify(repository =>
             repository.Insert(
-                It.IsAny<DomainEntities.Category>(), 
-                It.IsAny<CancellationToken>()), 
+                It.IsAny<DomainEntities.Category>(),
+                It.IsAny<CancellationToken>()),
             Times.Once);
         unitOfWorkMock.Verify(uow =>
             uow.Commit(It.IsAny<CancellationToken>()));
@@ -68,7 +68,7 @@ public class CreateCategoryTest(CreateCategoryFixture fixture)
     }
 
     [Fact(DisplayName = nameof(Should_Create_Category_Only_With_Name_And_Description))]
-    [Trait("Application ", "Create Category")]
+    [Trait("Application", "Create Category")]
     public async void Should_Create_Category_Only_With_Name_And_Description()
     {
         var repositoryMock = fixture.GetMockRepository();
@@ -97,14 +97,14 @@ public class CreateCategoryTest(CreateCategoryFixture fixture)
         parameters: 25,
         MemberType = typeof(CreateCategoryDataGenerator))]
     public async void Should_Throw_Error_When_Request_IsInvalid(
-        CreateCategoryRequest invalidRequest, 
+        CreateCategoryRequest invalidRequest,
         string exceptionMessage)
     {
         var useCase = new UseCase.CreateCategory(
-            fixture.GetMockRepository().Object, 
+            fixture.GetMockRepository().Object,
             fixture.GetMockUnitOfWork().Object);
-        
-        var action = async () => 
+
+        var action = async () =>
             await useCase.Handle(invalidRequest, CancellationToken.None);
 
         await action.Should()
@@ -112,5 +112,5 @@ public class CreateCategoryTest(CreateCategoryFixture fixture)
             .WithMessage(exceptionMessage);
     }
 
-    
+
 }
