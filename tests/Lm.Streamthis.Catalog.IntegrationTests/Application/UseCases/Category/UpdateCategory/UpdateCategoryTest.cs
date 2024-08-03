@@ -87,4 +87,44 @@ public class UpdateCategoryTest(UpdateCategoryFixture fixture)
         updatedCategory.IsActive.Should().Be(category.IsActive);
         updatedCategory.CreatedAt.Should().Be(category.CreatedAt);
     }
+
+    [Theory(DisplayName = nameof(Should_Update_Category_Only_With_Name))]
+    [Trait("Application", "Update Category")]
+    [MemberData(
+        nameof(UpdateCategoryDataGenerator.GetCategoriesToUpdate),
+        parameters: 5,
+        MemberType = typeof(UpdateCategoryDataGenerator))]
+    public async void Should_Update_Category_Only_With_Name(
+        DomainEntities.Category category, UpdateCategoryRequest request)
+    {
+        var dbContext = fixture.CreateDbContext();
+
+        await dbContext.AddRangeAsync(fixture.GetValidCategoryList(10));
+        var trackingInfo = await dbContext.AddAsync(category);
+        await dbContext.SaveChangesAsync();
+        trackingInfo.State = EntityState.Detached;
+
+        var repository = new CategoryRepository(dbContext);
+        var unitOfWork = new UnitOfWork(dbContext);
+
+        var requestOnlyWithName = new UpdateCategoryRequest(
+            request.Id,
+            request.Name);
+
+        var useCase = new UseCase.UpdateCategory(repository, unitOfWork);
+        var response = await useCase.Handle(requestOnlyWithName, CancellationToken.None);
+
+        response.Should().NotBeNull();
+        response.Id.Should().Be(request.Id);
+        response.Name.Should().Be(request.Name);
+        response.Description.Should().Be(category.Description);
+        response.IsActive.Should().Be(category.IsActive);
+
+        var updatedCategory = await fixture.CreateDbContext(true).Categories().FindAsync(request.Id);
+        updatedCategory.Should().NotBeNull();
+        updatedCategory.Name.Should().Be(request.Name);
+        updatedCategory.Description.Should().Be(category.Description);
+        updatedCategory.IsActive.Should().Be(category.IsActive);
+        updatedCategory.CreatedAt.Should().Be(category.CreatedAt);
+    }
 }
