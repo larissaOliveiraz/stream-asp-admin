@@ -5,6 +5,7 @@ using Lm.Streamthis.Catalog.Infra.Repositories;
 using Lm.Streamthis.Catalog.Infra;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
+using Lm.Streamthis.Catalog.Application.Exceptions;
 
 namespace Lm.Streamthis.Catalog.IntegrationTests.Application.UseCases.Category.UpdateCategory;
 
@@ -126,5 +127,30 @@ public class UpdateCategoryTest(UpdateCategoryFixture fixture)
         updatedCategory.Description.Should().Be(category.Description);
         updatedCategory.IsActive.Should().Be(category.IsActive);
         updatedCategory.CreatedAt.Should().Be(category.CreatedAt);
+    }
+
+    [Fact(DisplayName = nameof(Should_Throw_Exception_When_Category_NotFound))]
+    [Trait("Application", "Update Category")]
+    public async void Should_Throw_Exception_When_Category_NotFound()
+    {
+        var dbContext = fixture.CreateDbContext();
+
+        await dbContext.AddRangeAsync(fixture.GetValidCategoryList(10));
+        await dbContext.SaveChangesAsync();
+
+        var repository = new CategoryRepository(dbContext);
+        var unitOfWork = new UnitOfWork(dbContext);
+
+        var request = new UpdateCategoryRequest(
+            Guid.NewGuid(),
+            fixture.GetValidCategoryName());
+
+        var useCase = new UseCase.UpdateCategory(repository, unitOfWork);
+        var action = async () =>
+            await useCase.Handle(request, CancellationToken.None);
+
+        await action.Should()
+            .ThrowAsync<NotFoundException>()
+            .WithMessage($"Category with id '{request.Id}' was not found.");
     }
 }
