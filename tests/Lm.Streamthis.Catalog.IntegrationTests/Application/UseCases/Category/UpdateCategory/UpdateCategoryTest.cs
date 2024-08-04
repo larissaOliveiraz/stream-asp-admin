@@ -6,6 +6,7 @@ using Lm.Streamthis.Catalog.Infra;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 using Lm.Streamthis.Catalog.Application.Exceptions;
+using Lm.Streamthis.Catalog.Domain.Exceptions;
 
 namespace Lm.Streamthis.Catalog.IntegrationTests.Application.UseCases.Category.UpdateCategory;
 
@@ -152,5 +153,33 @@ public class UpdateCategoryTest(UpdateCategoryFixture fixture)
         await action.Should()
             .ThrowAsync<NotFoundException>()
             .WithMessage($"Category with id '{request.Id}' was not found.");
+    }
+
+    [Theory(DisplayName = nameof(Should_Throw_Exception_When_Request_IsInvalid))]
+    [Trait("Application", "Update Category")]
+    [MemberData(
+        nameof(UpdateCategoryDataGenerator.GetInvalidRequests),
+        parameters: 5,
+        MemberType = typeof(UpdateCategoryDataGenerator))]
+    public async void Should_Throw_Exception_When_Request_IsInvalid(
+        UpdateCategoryRequest invalidRequest, string exceptionMessage)
+    {
+        var dbContext = fixture.CreateDbContext();
+
+        var categoriesList = fixture.GetValidCategoryList(10);
+        await dbContext.AddRangeAsync(categoriesList);
+        await dbContext.SaveChangesAsync();
+        invalidRequest.Id = categoriesList[0].Id;
+
+        var repository = new CategoryRepository(dbContext);
+        var unitOfWork = new UnitOfWork(dbContext);
+
+        var useCase = new UseCase.UpdateCategory(repository, unitOfWork);
+        var action = async () =>
+            await useCase.Handle(invalidRequest, CancellationToken.None);
+
+        await action.Should()
+            .ThrowAsync<EntityValidationException>()
+            .WithMessage(exceptionMessage);
     }
 }
