@@ -10,7 +10,7 @@ namespace Lm.Streamthis.Catalog.IntegrationTests.Application.UseCases.Category.G
 public class GetCategoryTest(GetCategoryFixture fixture)
 {
     [Fact(DisplayName = nameof(Should_Get_Category))]
-    [Trait("Application", "Get Category")]
+    [Trait("Integration - Application", "Get Category")]
     public async void Should_Get_Category()
     {
         var dbContext = fixture.CreateDbContext();
@@ -35,7 +35,7 @@ public class GetCategoryTest(GetCategoryFixture fixture)
     }
 
     [Fact(DisplayName = nameof(Should_Throw_Exception_When_Category_NotFound))]
-    [Trait("Application", "Get Category")]
+    [Trait("Integration - Application", "Get Category")]
     public async void Should_Throw_Exception_When_Category_NotFound()
     {
         var dbContext = fixture.CreateDbContext();

@@ -11,7 +11,7 @@ namespace Lm.Streamthis.Catalog.IntegrationTests.Infra.Repositories.CategoryRepo
 public class CategoryRepositoryTest(CategoryRepositoryFixture fixture)
 {
     [Fact(DisplayName = nameof(Should_Insert_Category))]
-    [Trait("Infra", "Category Repository")]
+    [Trait("Integration - Infra", "Category Repository")]
     public async Task Should_Insert_Category()
     {
         var dbContext = fixture.CreateDbContext();
@@ -31,7 +31,7 @@ public class CategoryRepositoryTest(CategoryRepositoryFixture fixture)
     }
 
     [Fact(DisplayName = nameof(Should_Get_Category))]
-    [Trait("Infra", "Category Repository")]
+    [Trait("Integration - Infra", "Category Repository")]
     public async void Should_Get_Category()
     {
         var dbContext = fixture.CreateDbContext();
@@ -56,7 +56,7 @@ public class CategoryRepositoryTest(CategoryRepositoryFixture fixture)
     }
 
     [Fact(DisplayName = nameof(Should_Throw_Exception_When_Category_Not_Found))]
-    [Trait("Infra", "Category Repository")]
+    [Trait("Integration - Infra", "Category Repository")]
     public async void Should_Throw_Exception_When_Category_Not_Found()
     {
         var dbContext = fixture.CreateDbContext();
@@ -76,7 +76,7 @@ public class CategoryRepositoryTest(CategoryRepositoryFixture fixture)
     }
 
     [Fact(DisplayName = nameof(Should_Update_Category))]
-    [Trait("Infra", "Category Repository")]
+    [Trait("Integration - Infra", "Category Repository")]
     public async void Should_Update_Category()
     {
         var dbContext = fixture.CreateDbContext();
@@ -103,7 +103,7 @@ public class CategoryRepositoryTest(CategoryRepositoryFixture fixture)
     }
 
     [Fact(DisplayName = nameof(Should_Delete_Category))]
-    [Trait("Infra", "Category Repository")]
+    [Trait("Integration - Infra", "Category Repository")]
     public async void Should_Delete_Category()
     {
         var dbContext = fixture.CreateDbContext();
@@ -124,7 +124,7 @@ public class CategoryRepositoryTest(CategoryRepositoryFixture fixture)
     }
 
     [Fact(DisplayName = nameof(Should_Search_Category_Return_List_And_Total))]
-    [Trait("Infra", "Category Repository")]
+    [Trait("Integration - Infra", "Category Repository")]
     public async void Should_Search_Category_Return_List_And_Total()
     {
         var dbContext = fixture.CreateDbContext();
@@ -157,7 +157,7 @@ public class CategoryRepositoryTest(CategoryRepositoryFixture fixture)
     }
 
     [Fact(DisplayName = nameof(Should_Return_Empty_List_When_Search_HasNoItems))]
-    [Trait("Infra", "Category Repository")]
+    [Trait("Integration - Infra", "Category Repository")]
     public async void Should_Return_Empty_List_When_Search_HasNoItems()
     {
         var dbContext = fixture.CreateDbContext();
@@ -176,7 +176,7 @@ public class CategoryRepositoryTest(CategoryRepositoryFixture fixture)
     }
 
     [Theory(DisplayName = nameof(Should_Return_Search_Results_Paginated))]
-    [Trait("Infra", "Category Repository")]
+    [Trait("Integration - Infra", "Category Repository")]
     [InlineData(20, 1, 10, 10)]
     [InlineData(20, 2, 10, 10)]
     [InlineData(7, 2, 5, 2)]
@@ -212,7 +212,7 @@ public class CategoryRepositoryTest(CategoryRepositoryFixture fixture)
     }
 
     [Theory(DisplayName = nameof(Should_Search_By_Text))]
-    [Trait("Infra", "Category Repository")]
+    [Trait("Integration - Infra", "Category Repository")]
     [InlineData("Romance", 1, 5, 2, 2)]
     [InlineData("Fantasy", 1, 2, 2, 3)]
     [InlineData("Fantasy", 2, 5, 0, 3)]
@@ -251,7 +251,7 @@ public class CategoryRepositoryTest(CategoryRepositoryFixture fixture)
     }
 
     [Theory(DisplayName = nameof(Should_Return_Search_Results_Ordered))]
-    [Trait("Infra", "Category Repository")]
+    [Trait("Integration - Infra", "Category Repository")]
     [InlineData("name", SearchOrder.Asc)]
     [InlineData("name", SearchOrder.Desc)]
     [InlineData("id", SearchOrder.Asc)]

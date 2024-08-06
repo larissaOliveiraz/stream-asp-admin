@@ -7,7 +7,7 @@ namespace Lm.Streamthis.Catalog.IntegrationTests.Infra.UnitOfWork;
 public class UnitOfWorkTest(UnitOfWorkFixture fixture)
 {
     [Fact(DisplayName = nameof(Should_Commit))]
-    [Trait("Infra", "Unit of Work")]
+    [Trait("Integration - Infra", "Unit of Work")]
     public async void Should_Commit()
     {
         var dbContext = fixture.CreateDbContext();
@@ -26,7 +26,7 @@ public class UnitOfWorkTest(UnitOfWorkFixture fixture)
     }
 
     [Fact(DisplayName = nameof(Should_Rollback))]
-    [Trait("Infra", "Unit of Work")]
+    [Trait("Integration - Infra", "Unit of Work")]
     public async void Should_Rollback()
     {
         var dbContext = fixture.CreateDbContext();

@@ -12,7 +12,7 @@ namespace Lm.Streamthis.Catalog.IntegrationTests.Application.UseCases.Category.C
 public class CreateCategoryTest(CreateCategoryFixture fixture)
 {
     [Fact(DisplayName = nameof(Should_Create_Category))]
-    [Trait("Application", "Create Category")]
+    [Trait("Integration - Application", "Create Category")]
     public async void Should_Create_Category()
     {
         var dbContext = fixture.CreateDbContext();
@@ -42,7 +42,7 @@ public class CreateCategoryTest(CreateCategoryFixture fixture)
     }
 
     [Fact(DisplayName = nameof(Should_Create_Category_Only_With_Name))]
-    [Trait("Application", "Create Category")]
+    [Trait("Integration - Application", "Create Category")]
     public async void Should_Create_Category_Only_With_Name()
     {
         var dbContext = fixture.CreateDbContext();
@@ -72,7 +72,7 @@ public class CreateCategoryTest(CreateCategoryFixture fixture)
     }
 
     [Fact(DisplayName = nameof(Should_Create_Category_Only_With_Name_And_Description))]
-    [Trait("Application", "Create Category")]
+    [Trait("Integration - Application", "Create Category")]
     public async void Should_Create_Category_Only_With_Name_And_Description()
     {
         var dbContext = fixture.CreateDbContext();
@@ -102,7 +102,7 @@ public class CreateCategoryTest(CreateCategoryFixture fixture)
     }
 
     [Theory(DisplayName = nameof(Should_Throw_Exception_When_Request_IsInvalid))]
-    [Trait("Application", "Create Category")]
+    [Trait("Integration - Application", "Create Category")]
     [MemberData(
        nameof(CreateCategoryDataGenerator.GetInvalidRequests),
        parameters: 5,

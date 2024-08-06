@@ -14,7 +14,7 @@ namespace Lm.Streamthis.Catalog.IntegrationTests.Application.UseCases.Category.U
 public class UpdateCategoryTest(UpdateCategoryFixture fixture)
 {
     [Theory(DisplayName = nameof(Should_Update_Category))]
-    [Trait("Application", "Update Category")]
+    [Trait("Integration - Application", "Update Category")]
     [MemberData(
         nameof(UpdateCategoryDataGenerator.GetCategoriesToUpdate),
         parameters: 3,
@@ -50,7 +50,7 @@ public class UpdateCategoryTest(UpdateCategoryFixture fixture)
     }
 
     [Theory(DisplayName = nameof(Should_Update_Category_Without_IsActive))]
-    [Trait("Application", "Update Category")]
+    [Trait("Integration - Application", "Update Category")]
     [MemberData(
         nameof(UpdateCategoryDataGenerator.GetCategoriesToUpdate),
         parameters: 5,
@@ -91,7 +91,7 @@ public class UpdateCategoryTest(UpdateCategoryFixture fixture)
     }
 
     [Theory(DisplayName = nameof(Should_Update_Category_Only_With_Name))]
-    [Trait("Application", "Update Category")]
+    [Trait("Integration - Application", "Update Category")]
     [MemberData(
         nameof(UpdateCategoryDataGenerator.GetCategoriesToUpdate),
         parameters: 5,
@@ -131,7 +131,7 @@ public class UpdateCategoryTest(UpdateCategoryFixture fixture)
     }
 
     [Fact(DisplayName = nameof(Should_Throw_Exception_When_Category_NotFound))]
-    [Trait("Application", "Update Category")]
+    [Trait("Integration - Application", "Update Category")]
     public async void Should_Throw_Exception_When_Category_NotFound()
     {
         var dbContext = fixture.CreateDbContext();
@@ -156,7 +156,7 @@ public class UpdateCategoryTest(UpdateCategoryFixture fixture)
     }
 
     [Theory(DisplayName = nameof(Should_Throw_Exception_When_Request_IsInvalid))]
-    [Trait("Application", "Update Category")]
+    [Trait("Integration - Application", "Update Category")]
     [MemberData(
         nameof(UpdateCategoryDataGenerator.GetInvalidRequests),
         parameters: 5,
