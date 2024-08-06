@@ -11,7 +11,7 @@ namespace Lm.Streamthis.Catalog.UnitTests.Application.Category.CreateCategory;
 public class CreateCategoryTest(CreateCategoryFixture fixture)
 {
     [Fact(DisplayName = nameof(Should_Create_Category))]
-    [Trait("Application", "Create Category")]
+    [Trait("Unit - Application", "Create Category")]
     public async void Should_Create_Category()
     {
         var repositoryMock = fixture.GetMockRepository();
@@ -40,7 +40,7 @@ public class CreateCategoryTest(CreateCategoryFixture fixture)
     }
 
     [Fact(DisplayName = nameof(Should_Create_Category_Only_With_Name))]
-    [Trait("Application", "Create Category")]
+    [Trait("Unit - Application", "Create Category")]
     public async void Should_Create_Category_Only_With_Name()
     {
         var repositoryMock = fixture.GetMockRepository();
@@ -68,7 +68,7 @@ public class CreateCategoryTest(CreateCategoryFixture fixture)
     }
 
     [Fact(DisplayName = nameof(Should_Create_Category_Only_With_Name_And_Description))]
-    [Trait("Application", "Create Category")]
+    [Trait("Unit - Application", "Create Category")]
     public async void Should_Create_Category_Only_With_Name_And_Description()
     {
         var repositoryMock = fixture.GetMockRepository();
@@ -91,7 +91,7 @@ public class CreateCategoryTest(CreateCategoryFixture fixture)
     }
 
     [Theory(DisplayName = nameof(Should_Throw_Error_When_Request_IsInvalid))]
-    [Trait("Application", "Create Category")]
+    [Trait("Unit - Application", "Create Category")]
     [MemberData(
         nameof(CreateCategoryDataGenerator.GetInvalidRequests),
         parameters: 25,

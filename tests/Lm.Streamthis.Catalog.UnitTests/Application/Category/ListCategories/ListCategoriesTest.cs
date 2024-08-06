@@ -11,7 +11,7 @@ namespace Lm.Streamthis.Catalog.UnitTests.Application.Category.ListCategories;
 public class ListCategoriesTest(ListCategoriesFixture fixture)
 {
     [Fact(DisplayName = nameof(Should_List_Categories))]
-    [Trait("Application", "List Categories")]
+    [Trait("Unit - Application", "List Categories")]
     public async void Should_List_Categories()
     {
         var repositoryMock = fixture.GetMockRepository();
@@ -68,7 +68,7 @@ public class ListCategoriesTest(ListCategoriesFixture fixture)
     }
 
     [Theory(DisplayName = nameof(Should_List_Categories_Without_All_Request_Parameters))]
-    [Trait("Application", "List Categories")]
+    [Trait("Unit - Application", "List Categories")]
     [MemberData(
         nameof(ListCategoriesDataGenerator.GetValidRequestsWithoutAnyParameters),
         parameters: 12,
@@ -127,7 +127,7 @@ public class ListCategoriesTest(ListCategoriesFixture fixture)
     }
 
     [Fact(DisplayName = nameof(Should_List_Categories_When_Empty))]
-    [Trait("Application", "List Categories")]
+    [Trait("Unit - Application", "List Categories")]
     public async void Should_List_Categories_When_Empty()
     {
         var repositoryMock = fixture.GetMockRepository();

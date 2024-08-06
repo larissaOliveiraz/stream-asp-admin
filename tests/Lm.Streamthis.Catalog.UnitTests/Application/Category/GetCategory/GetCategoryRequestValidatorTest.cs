@@ -7,7 +7,7 @@ namespace Lm.Streamthis.Catalog.UnitTests.Application.Category.GetCategory;
 public class GetCategoryRequestValidatorTest(GetCategoryFixture fixture)
 {
     [Fact(DisplayName = nameof(Should_Validate_Request))]
-    [Trait("Application", "Get Category Request Validator")]
+    [Trait("Unit - Application", "Get Category Request Validator")]
     public void Should_Validate_Request()
     {
         var validId = Guid.NewGuid();
@@ -23,7 +23,7 @@ public class GetCategoryRequestValidatorTest(GetCategoryFixture fixture)
     }
 
     [Fact(DisplayName = nameof(Should_Throw_Exception_When_Request_IsInvalid))]
-    [Trait("Application", "Get Category Request Validator")]
+    [Trait("Unit - Application", "Get Category Request Validator")]
     public void Should_Throw_Exception_When_Request_IsInvalid()
     {
         var invalidId = Guid.Empty;

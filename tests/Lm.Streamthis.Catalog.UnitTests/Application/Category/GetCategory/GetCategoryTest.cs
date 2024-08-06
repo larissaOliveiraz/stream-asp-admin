@@ -10,14 +10,14 @@ namespace Lm.Streamthis.Catalog.UnitTests.Application.Category.GetCategory;
 public class GetCategoryTest(GetCategoryFixture fixture)
 {
     [Fact(DisplayName = nameof(Should_Get_Category))]
-    [Trait("Application", "Get Category")]
+    [Trait("Unit - Application", "Get Category")]
     public async void Should_Get_Category()
     {
         var repositoryMock = fixture.GetMockRepository();
         var category = fixture.GetValidCategory();
 
         repositoryMock
-            .Setup(x => 
+            .Setup(x =>
                 x.Get(It.IsAny<Guid>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(category);
 
@@ -27,10 +27,10 @@ public class GetCategoryTest(GetCategoryFixture fixture)
 
         var response = await useCase.Handle(request, CancellationToken.None);
 
-        repositoryMock.Verify(repository => 
+        repositoryMock.Verify(repository =>
             repository.Get(
-                It.IsAny<Guid>(), 
-                It.IsAny<CancellationToken>()), 
+                It.IsAny<Guid>(),
+                It.IsAny<CancellationToken>()),
             Times.Once);
         response.Should().NotBeNull();
         response.Name.Should().Be(category.Name);
@@ -41,7 +41,7 @@ public class GetCategoryTest(GetCategoryFixture fixture)
     }
 
     [Fact(DisplayName = nameof(Should_Throw_Exception_When_Category_NotFound))]
-    [Trait("Application", "Get Category")]
+    [Trait("Unit - Application", "Get Category")]
     public async void Should_Throw_Exception_When_Category_NotFound()
     {
         var repositoryMock = fixture.GetMockRepository();
@@ -56,7 +56,7 @@ public class GetCategoryTest(GetCategoryFixture fixture)
 
         var useCase = new UseCase.GetCategory(repositoryMock.Object);
 
-        var action = async () => 
+        var action = async () =>
             await useCase.Handle(request, CancellationToken.None);
 
         await action.Should().ThrowAsync<NotFoundException>();

@@ -10,7 +10,7 @@ namespace Lm.Streamthis.Catalog.UnitTests.Application.Category.DeleteCategory;
 public class DeleteCategoryTest(DeleteCategoryFixture fixture)
 {
     [Fact(DisplayName = nameof(Should_Delete_Category))]
-    [Trait("Application", "Delete Category")]
+    [Trait("Unit - Application", "Delete Category")]
     public async void Should_Delete_Category()
     {
         var repositoryMock = fixture.GetMockRepository();
@@ -22,16 +22,16 @@ public class DeleteCategoryTest(DeleteCategoryFixture fixture)
             .Setup(x =>
                 x.Get(validCategory.Id, It.IsAny<CancellationToken>()))
             .ReturnsAsync(validCategory);
-        
+
         var validRequest = new DeleteCategoryRequest(validCategory.Id);
 
         var useCase = new UseCase.DeleteCategory(repositoryMock.Object, unitOfWork.Object);
         await useCase.Handle(validRequest, CancellationToken.None);
-        
-        repositoryMock.Verify(repository => 
+
+        repositoryMock.Verify(repository =>
             repository.Get(validCategory.Id, It.IsAny<CancellationToken>()),
             Times.Once);
-        repositoryMock.Verify(repository => 
+        repositoryMock.Verify(repository =>
             repository.Delete(validCategory, It.IsAny<CancellationToken>()),
             Times.Once);
         unitOfWork.Verify(uow =>
@@ -40,7 +40,7 @@ public class DeleteCategoryTest(DeleteCategoryFixture fixture)
     }
 
     [Fact(DisplayName = nameof(Should_Throw_Exception_When_Category_NotFound))]
-    [Trait("Application", "Delete Category")]
+    [Trait("Unit - Application", "Delete Category")]
     public async void Should_Throw_Exception_When_Category_NotFound()
     {
         var repositoryMock = fixture.GetMockRepository();
@@ -57,12 +57,12 @@ public class DeleteCategoryTest(DeleteCategoryFixture fixture)
         var request = new DeleteCategoryRequest(randomId);
 
         var useCase = new UseCase.DeleteCategory(repositoryMock.Object, unitOfWork.Object);
-        
-        var action = async () => 
+
+        var action = async () =>
             await useCase.Handle(request, CancellationToken.None);
 
         await action.Should().ThrowAsync<NotFoundException>();
-        repositoryMock.Verify(repository => 
+        repositoryMock.Verify(repository =>
             repository.Get(randomId, It.IsAny<CancellationToken>()),
             Times.Once);
     }
