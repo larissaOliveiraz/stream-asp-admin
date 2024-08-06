@@ -7,7 +7,7 @@ public class ListCategoriesDataGenerator
     public static IEnumerable<object[]> GetValidRequestsWithoutAnyParameters(int? times = 12)
     {
         var fixture = new ListCategoriesFixture();
-        var request = fixture.GetValidRequest();
+        var request = fixture.GetRequest();
         const int totalCases = 6;
 
         for (var i = 0; i < times; i++)

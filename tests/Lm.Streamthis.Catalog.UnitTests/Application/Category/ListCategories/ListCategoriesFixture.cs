@@ -7,17 +7,17 @@ namespace Lm.Streamthis.Catalog.UnitTests.Application.Category.ListCategories;
 
 public class ListCategoriesFixture : CategoryBaseFixture
 {
-    public List<DomainEntities.Category> GetValidCategoryList(int? length = 15)
+    public List<DomainEntities.Category> GetCategoriesList(int? length = 15)
     {
         var categoryList = new List<DomainEntities.Category>();
-        
+
         for (var i = 0; i < length; i++)
-            categoryList.Add(GetValidCategory());
+            categoryList.Add(GetCategory());
 
         return categoryList;
     }
 
-    public ListCategoriesRequest GetValidRequest()
+    public ListCategoriesRequest GetRequest()
     {
         var randomNumber = new Random();
         return new ListCategoriesRequest(

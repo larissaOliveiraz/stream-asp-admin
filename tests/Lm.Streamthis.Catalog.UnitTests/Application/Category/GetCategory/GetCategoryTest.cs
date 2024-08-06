@@ -14,7 +14,7 @@ public class GetCategoryTest(GetCategoryFixture fixture)
     public async void Should_Get_Category()
     {
         var repositoryMock = fixture.GetMockRepository();
-        var category = fixture.GetValidCategory();
+        var category = fixture.GetCategory();
 
         repositoryMock
             .Setup(x =>

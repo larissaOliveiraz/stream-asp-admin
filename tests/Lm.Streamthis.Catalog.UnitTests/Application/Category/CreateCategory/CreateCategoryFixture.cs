@@ -5,29 +5,29 @@ namespace Lm.Streamthis.Catalog.UnitTests.Application.Category.CreateCategory;
 
 public class CreateCategoryFixture : CategoryBaseFixture
 {
-    public CreateCategoryRequest GetValidRequest() =>
+    public CreateCategoryRequest GetRequest() =>
         new(
-            GetValidCategoryName(),
-            GetValidCategoryDescription(),
-            GetRandomBoolean());
+            GetCategoryName(),
+            GetCategoryDescription(),
+            GetBoolean());
 
     public CreateCategoryRequest GetInvalidRequestNullName()
     {
-        var requestWithNullName = GetValidRequest();
+        var requestWithNullName = GetRequest();
         requestWithNullName.Name = null!;
         return requestWithNullName;
     }
 
     public CreateCategoryRequest GetInvalidRequestShortName()
     {
-        var requestWithShortName = GetValidRequest();
+        var requestWithShortName = GetRequest();
         requestWithShortName.Name = requestWithShortName.Name[..2];
         return requestWithShortName;
     }
 
     public CreateCategoryRequest GetInvalidRequestLongName()
     {
-        var requestWithLongName = GetValidRequest();
+        var requestWithLongName = GetRequest();
         while (requestWithLongName.Name.Length <= 255)
             requestWithLongName.Name = $"{requestWithLongName.Name} {Faker.Commerce.ProductName()}";
         return requestWithLongName;
@@ -35,7 +35,7 @@ public class CreateCategoryFixture : CategoryBaseFixture
 
     public CreateCategoryRequest GetInvalidRequestNullDescription()
     {
-        var requestWithNullDescription = GetValidRequest();
+        var requestWithNullDescription = GetRequest();
         requestWithNullDescription.Description = null!;
         return requestWithNullDescription;
     }
@@ -43,15 +43,15 @@ public class CreateCategoryFixture : CategoryBaseFixture
     public CreateCategoryRequest GetInvalidRequestLongDescription
         ()
     {
-        var requestWithLongDescription = GetValidRequest();
+        var requestWithLongDescription = GetRequest();
         while (requestWithLongDescription.Description.Length <= 10_000)
-            requestWithLongDescription.Description = 
+            requestWithLongDescription.Description =
                 $"{requestWithLongDescription.Description} {Faker.Commerce.ProductName()}";
         return requestWithLongDescription;
     }
 }
 
 [CollectionDefinition(nameof(CreateCategoryFixture))]
-public class CreateCategoryFixtureCollection 
+public class CreateCategoryFixtureCollection
     : ICollectionFixture<CreateCategoryFixture>
 { }

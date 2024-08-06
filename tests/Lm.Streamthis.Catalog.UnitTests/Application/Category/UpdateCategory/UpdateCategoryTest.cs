@@ -160,7 +160,7 @@ public class UpdateCategoryTest(UpdateCategoryFixture fixture)
     {
         var repositoryMock = fixture.GetMockRepository();
         var unitOfWork = fixture.GetMockUnitOfWork();
-        var validCategory = fixture.GetValidCategory();
+        var validCategory = fixture.GetCategory();
         invalidRequest.Id = validCategory.Id;
 
         repositoryMock

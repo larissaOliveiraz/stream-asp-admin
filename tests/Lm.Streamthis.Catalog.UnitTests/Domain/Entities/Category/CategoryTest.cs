@@ -11,7 +11,7 @@ public class CategoryTest(CategoryFixture fixture)
     [Trait("Unit - Domain", "Category")]
     public void Should_Initialize_With_Valid_Values()
     {
-        var validCategory = fixture.GetValidCategory();
+        var validCategory = fixture.GetCategory();
 
         var datetimeBefore = DateTime.Now;
         var category = new DomainEntities.Category(validCategory.Name, validCategory.Description);
@@ -33,7 +33,7 @@ public class CategoryTest(CategoryFixture fixture)
     [InlineData(false)]
     public void Should_Initialize_With_Specified_IsActive_Value(bool isActive)
     {
-        var validCategory = fixture.GetValidCategory();
+        var validCategory = fixture.GetCategory();
 
         var datetimeBefore = DateTime.Now;
         var category = new DomainEntities.Category(validCategory.Name, validCategory.Description, isActive);
@@ -56,7 +56,7 @@ public class CategoryTest(CategoryFixture fixture)
     [InlineData("   ")]
     public void Should_Throw_Error_When_Name_IsEmpty(string? name)
     {
-        var validCategory = fixture.GetValidCategory();
+        var validCategory = fixture.GetCategory();
 
         var action = () =>
             new DomainEntities.Category(name!, validCategory.Description);
@@ -70,7 +70,7 @@ public class CategoryTest(CategoryFixture fixture)
     [Trait("Unit - Domain", "Category")]
     public void Should_Throw_Error_When_Description_IsNull()
     {
-        var validCategory = fixture.GetValidCategory();
+        var validCategory = fixture.GetCategory();
 
         var action = () =>
             new DomainEntities.Category(validCategory.Name, null!);
@@ -84,7 +84,7 @@ public class CategoryTest(CategoryFixture fixture)
     [Trait("Unit - Domain", "Category")]
     public void Should_Throw_Error_When_Name_Has_Less_Than_3_Characters()
     {
-        var validCategory = fixture.GetValidCategory();
+        var validCategory = fixture.GetCategory();
 
         var action = () =>
             new DomainEntities.Category("ca", validCategory.Description);
@@ -99,7 +99,7 @@ public class CategoryTest(CategoryFixture fixture)
     public void Should_Throw_Error_When_Name_Has_More_Than_255_Characters()
     {
         var invalidName = string.Join("", Enumerable.Range(0, 256).Select(_ => "a").ToArray());
-        var validCategory = fixture.GetValidCategory();
+        var validCategory = fixture.GetCategory();
 
         var action = () =>
             new DomainEntities.Category(invalidName, validCategory.Description);
@@ -114,7 +114,7 @@ public class CategoryTest(CategoryFixture fixture)
     public void Should_Throw_Error_When_Description_Has_More_Than_10000_Characters()
     {
         var invalidDescription = string.Join(null, Enumerable.Range(0, 10001).Select(_ => "a").ToArray());
-        var validCategory = fixture.GetValidCategory();
+        var validCategory = fixture.GetCategory();
 
         var action = () =>
             new DomainEntities.Category(validCategory.Name, invalidDescription);
@@ -128,7 +128,7 @@ public class CategoryTest(CategoryFixture fixture)
     [Trait("Unit - Domain", "Category")]
     public void Should_Activate()
     {
-        var validCategory = fixture.GetValidCategory();
+        var validCategory = fixture.GetCategory();
 
         var category =
             new DomainEntities.Category(validCategory.Name, validCategory.Description, false);
@@ -142,7 +142,7 @@ public class CategoryTest(CategoryFixture fixture)
     [Trait("Unit - Domain", "Category")]
     public void Should_Deactivate()
     {
-        var validCategory = fixture.GetValidCategory();
+        var validCategory = fixture.GetCategory();
 
         var category =
             new DomainEntities.Category(validCategory.Name, validCategory.Description);
@@ -156,8 +156,8 @@ public class CategoryTest(CategoryFixture fixture)
     [Trait("Unit - Domain", "Category")]
     public void Should_Update_Name_And_Description()
     {
-        var category = fixture.GetValidCategory();
-        var newCategory = fixture.GetValidCategory();
+        var category = fixture.GetCategory();
+        var newCategory = fixture.GetCategory();
 
         category.Update(newCategory.Name, newCategory.Description);
 
@@ -169,8 +169,8 @@ public class CategoryTest(CategoryFixture fixture)
     [Trait("Unit - Domain", "Category")]
     public void Should_Update_Name()
     {
-        var category = fixture.GetValidCategory();
-        var newName = fixture.GetValidCategoryName();
+        var category = fixture.GetCategory();
+        var newName = fixture.GetCategoryName();
         var currentDescription = category.Description;
 
         category.Update(newName);

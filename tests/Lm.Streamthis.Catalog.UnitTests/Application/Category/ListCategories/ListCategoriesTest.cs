@@ -15,9 +15,9 @@ public class ListCategoriesTest(ListCategoriesFixture fixture)
     public async void Should_List_Categories()
     {
         var repositoryMock = fixture.GetMockRepository();
-        var categoryList = fixture.GetValidCategoryList();
+        var categoryList = fixture.GetCategoriesList();
 
-        var request = fixture.GetValidRequest();
+        var request = fixture.GetRequest();
 
         var searchResponse = new SearchResponse<DomainEntities.Category>(
             request.Page,
@@ -76,7 +76,7 @@ public class ListCategoriesTest(ListCategoriesFixture fixture)
     public async void Should_List_Categories_Without_All_Request_Parameters(ListCategoriesRequest request)
     {
         var repositoryMock = fixture.GetMockRepository();
-        var categoryList = fixture.GetValidCategoryList();
+        var categoryList = fixture.GetCategoriesList();
 
         var searchResponse = new SearchResponse<DomainEntities.Category>(
             request.Page,
@@ -131,7 +131,7 @@ public class ListCategoriesTest(ListCategoriesFixture fixture)
     public async void Should_List_Categories_When_Empty()
     {
         var repositoryMock = fixture.GetMockRepository();
-        var request = fixture.GetValidRequest();
+        var request = fixture.GetRequest();
 
         var searchResponse = new SearchResponse<DomainEntities.Category>(
             request.Page,

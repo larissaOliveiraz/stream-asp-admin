@@ -19,7 +19,7 @@ public class CreateCategoryTest(CreateCategoryFixture fixture)
 
         var useCase = new UseCase.CreateCategory(repositoryMock.Object, unitOfWorkMock.Object);
 
-        var request = fixture.GetValidRequest();
+        var request = fixture.GetRequest();
         var response = await useCase.Handle(request, CancellationToken.None);
 
         repositoryMock.Verify(repository =>
@@ -48,7 +48,7 @@ public class CreateCategoryTest(CreateCategoryFixture fixture)
 
         var useCase = new UseCase.CreateCategory(repositoryMock.Object, unitOfWorkMock.Object);
 
-        var request = new CreateCategoryRequest(fixture.GetValidRequest().Name);
+        var request = new CreateCategoryRequest(fixture.GetRequest().Name);
         var response = await useCase.Handle(request, CancellationToken.None);
 
         repositoryMock.Verify(repository =>
@@ -76,7 +76,7 @@ public class CreateCategoryTest(CreateCategoryFixture fixture)
 
         var useCase = new UseCase.CreateCategory(repositoryMock.Object, unitOfWorkMock.Object);
 
-        var normalRequest = fixture.GetValidRequest();
+        var normalRequest = fixture.GetRequest();
         var request = new CreateCategoryRequest(normalRequest.Name, normalRequest.Description);
 
         var response = await useCase.Handle(request, CancellationToken.None);
