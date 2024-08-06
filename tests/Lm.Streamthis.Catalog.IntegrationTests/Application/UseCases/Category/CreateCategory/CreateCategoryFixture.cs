@@ -7,9 +7,9 @@ public class CreateCategoryFixture : CategoryBaseFixture
 {
     public CreateCategoryRequest GetRequest() =>
         new CreateCategoryRequest(
-            GetValidCategoryName(),
-            GetValidCategoryDescription(),
-            GetRandomBoolean());
+            GetCategoryName(),
+            GetCategoryDescription(),
+            GetBoolean());
 
     public CreateCategoryRequest GetInvalidRequestNullName()
     {

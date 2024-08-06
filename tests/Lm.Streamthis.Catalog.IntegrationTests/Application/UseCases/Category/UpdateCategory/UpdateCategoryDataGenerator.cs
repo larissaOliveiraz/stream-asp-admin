@@ -8,7 +8,7 @@ public class UpdateCategoryDataGenerator
 
         for (int i = 0; i < times; i++)
         {
-            var category = fixture.GetValidCategory();
+            var category = fixture.GetCategory();
             var request = fixture.GetRequest(category.Id);
 
             yield return [category, request];

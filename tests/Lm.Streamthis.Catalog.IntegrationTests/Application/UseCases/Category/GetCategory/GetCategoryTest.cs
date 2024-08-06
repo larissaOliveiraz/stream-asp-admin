@@ -14,7 +14,7 @@ public class GetCategoryTest(GetCategoryFixture fixture)
     public async void Should_Get_Category()
     {
         var dbContext = fixture.CreateDbContext();
-        var validCategory = fixture.GetValidCategory();
+        var validCategory = fixture.GetCategory();
 
         dbContext.Categories().Add(validCategory);
         await dbContext.SaveChangesAsync();

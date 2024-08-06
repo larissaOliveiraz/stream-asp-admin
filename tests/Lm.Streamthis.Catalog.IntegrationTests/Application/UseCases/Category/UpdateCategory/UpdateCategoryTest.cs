@@ -23,7 +23,7 @@ public class UpdateCategoryTest(UpdateCategoryFixture fixture)
         DomainEntities.Category category, UpdateCategoryRequest request)
     {
         var dbContext = fixture.CreateDbContext();
-        await dbContext.AddRangeAsync(fixture.GetValidCategoryList(10));
+        await dbContext.AddRangeAsync(fixture.GetCategoriesList(10));
         var trackingInfo = await dbContext.AddAsync(category);
         await dbContext.SaveChangesAsync();
         trackingInfo.State = EntityState.Detached;
@@ -60,7 +60,7 @@ public class UpdateCategoryTest(UpdateCategoryFixture fixture)
     {
         var dbContext = fixture.CreateDbContext();
 
-        await dbContext.AddRangeAsync(fixture.GetValidCategoryList(10));
+        await dbContext.AddRangeAsync(fixture.GetCategoriesList(10));
         var trackingInfo = await dbContext.AddAsync(category);
         await dbContext.SaveChangesAsync();
         trackingInfo.State = EntityState.Detached;
@@ -101,7 +101,7 @@ public class UpdateCategoryTest(UpdateCategoryFixture fixture)
     {
         var dbContext = fixture.CreateDbContext();
 
-        await dbContext.AddRangeAsync(fixture.GetValidCategoryList(10));
+        await dbContext.AddRangeAsync(fixture.GetCategoriesList(10));
         var trackingInfo = await dbContext.AddAsync(category);
         await dbContext.SaveChangesAsync();
         trackingInfo.State = EntityState.Detached;
@@ -136,7 +136,7 @@ public class UpdateCategoryTest(UpdateCategoryFixture fixture)
     {
         var dbContext = fixture.CreateDbContext();
 
-        await dbContext.AddRangeAsync(fixture.GetValidCategoryList(10));
+        await dbContext.AddRangeAsync(fixture.GetCategoriesList(10));
         await dbContext.SaveChangesAsync();
 
         var repository = new CategoryRepository(dbContext);
@@ -144,7 +144,7 @@ public class UpdateCategoryTest(UpdateCategoryFixture fixture)
 
         var request = new UpdateCategoryRequest(
             Guid.NewGuid(),
-            fixture.GetValidCategoryName());
+            fixture.GetCategoryName());
 
         var useCase = new UseCase.UpdateCategory(repository, unitOfWork);
         var action = async () =>
@@ -166,7 +166,7 @@ public class UpdateCategoryTest(UpdateCategoryFixture fixture)
     {
         var dbContext = fixture.CreateDbContext();
 
-        var categoriesList = fixture.GetValidCategoryList(10);
+        var categoriesList = fixture.GetCategoriesList(10);
         await dbContext.AddRangeAsync(categoriesList);
         await dbContext.SaveChangesAsync();
         invalidRequest.Id = categoriesList[0].Id;

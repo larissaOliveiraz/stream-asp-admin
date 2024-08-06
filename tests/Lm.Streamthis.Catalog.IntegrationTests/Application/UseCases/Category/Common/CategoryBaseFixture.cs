@@ -5,7 +5,7 @@ namespace Lm.Streamthis.Catalog.IntegrationTests.Application.UseCases.Category.C
 
 public class CategoryBaseFixture : BaseFixture
 {
-    public string GetValidCategoryName()
+    public string GetCategoryName()
     {
         var categoryName = "";
 
@@ -18,7 +18,7 @@ public class CategoryBaseFixture : BaseFixture
         return categoryName;
     }
 
-    public string GetValidCategoryDescription()
+    public string GetCategoryDescription()
     {
         var categoryDescription = Faker.Commerce.ProductDescription();
 
@@ -28,12 +28,12 @@ public class CategoryBaseFixture : BaseFixture
         return categoryDescription;
     }
 
-    public static bool GetRandomBoolean() => new Random().NextDouble() < 0.5;
+    public static bool GetBoolean() => new Random().NextDouble() < 0.5;
 
-    public DomainEntities.Category GetValidCategory() =>
-        new(GetValidCategoryName(), GetValidCategoryDescription(), GetRandomBoolean());
+    public DomainEntities.Category GetCategory() =>
+        new(GetCategoryName(), GetCategoryDescription(), GetBoolean());
 
 
-    public List<DomainEntities.Category> GetValidCategoryList(int length) =>
-        Enumerable.Range(0, length).Select(_ => GetValidCategory()).ToList();
+    public List<DomainEntities.Category> GetCategoriesList(int length) =>
+        Enumerable.Range(0, length).Select(_ => GetCategory()).ToList();
 }

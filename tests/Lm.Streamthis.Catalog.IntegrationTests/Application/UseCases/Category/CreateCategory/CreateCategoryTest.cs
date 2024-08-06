@@ -16,7 +16,7 @@ public class CreateCategoryTest(CreateCategoryFixture fixture)
     public async void Should_Create_Category()
     {
         var dbContext = fixture.CreateDbContext();
-        var category = fixture.GetValidCategory();
+        var category = fixture.GetCategory();
 
         var repository = new CategoryRepository(dbContext);
         var unitOfWork = new UnitOfWork(dbContext);
@@ -46,7 +46,7 @@ public class CreateCategoryTest(CreateCategoryFixture fixture)
     public async void Should_Create_Category_Only_With_Name()
     {
         var dbContext = fixture.CreateDbContext();
-        var category = fixture.GetValidCategory();
+        var category = fixture.GetCategory();
 
         var repository = new CategoryRepository(dbContext);
         var unitOfWork = new UnitOfWork(dbContext);
@@ -76,7 +76,7 @@ public class CreateCategoryTest(CreateCategoryFixture fixture)
     public async void Should_Create_Category_Only_With_Name_And_Description()
     {
         var dbContext = fixture.CreateDbContext();
-        var category = fixture.GetValidCategory();
+        var category = fixture.GetCategory();
 
         var repository = new CategoryRepository(dbContext);
         var unitOfWork = new UnitOfWork(dbContext);

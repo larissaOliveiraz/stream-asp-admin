@@ -8,9 +8,9 @@ public class UpdateCategoryFixture : CategoryBaseFixture
     public UpdateCategoryRequest GetRequest(Guid? id = null) =>
         new UpdateCategoryRequest(
             id ?? Guid.NewGuid(),
-            GetValidCategoryName(),
-            GetValidCategoryDescription(),
-            GetRandomBoolean());
+            GetCategoryName(),
+            GetCategoryDescription(),
+            GetBoolean());
 
     public UpdateCategoryRequest GetInvalidRequestShortName()
     {
