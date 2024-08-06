@@ -8,9 +8,9 @@ namespace Lm.Streamthis.Catalog.UnitTests.Domain.Validation;
 public class DomainValidationTest
 {
     private Faker Faker { get; } = new();
-    
+
     [Fact(DisplayName = nameof(Should_Not_Be_Null))]
-    [Trait("Domain", "Validation")]
+    [Trait("Unit - Domain", "Validation")]
     public void Should_Not_Be_Null()
     {
         var value = Faker.Commerce.ProductName();
@@ -22,7 +22,7 @@ public class DomainValidationTest
     }
 
     [Fact(DisplayName = nameof(Should_Throw_Error_When_Value_IsNull))]
-    [Trait("Domain", "Validation")]
+    [Trait("Unit - Domain", "Validation")]
     public void Should_Throw_Error_When_Value_IsNull()
     {
         object? invalidValue = null;
@@ -36,7 +36,7 @@ public class DomainValidationTest
     }
 
     [Fact(DisplayName = nameof(Should_Not_Be_Null_Or_Empty))]
-    [Trait("Domain", "Validation")]
+    [Trait("Unit - Domain", "Validation")]
     public void Should_Not_Be_Null_Or_Empty()
     {
         var value = Faker.Commerce.ProductName();
@@ -48,7 +48,7 @@ public class DomainValidationTest
     }
 
     [Theory(DisplayName = nameof(Should_Throw_Error_When_Value_IsNull_OrEmpty))]
-    [Trait("Domain", "Validation")]
+    [Trait("Unit - Domain", "Validation")]
     [InlineData("")]
     [InlineData("   ")]
     [InlineData(null)]
@@ -63,7 +63,7 @@ public class DomainValidationTest
     }
 
     [Fact(DisplayName = nameof(Should_Not_Have_Less_Characters_Than_Minimum))]
-    [Trait("Domain", "Validation")]
+    [Trait("Unit - Domain", "Validation")]
     public void Should_Not_Have_Less_Characters_Than_Minimum()
     {
         var action = () =>
@@ -73,10 +73,10 @@ public class DomainValidationTest
     }
 
     [Theory(DisplayName = nameof(Should_Throw_Error_When_Value_IsLess_Than_MinLength))]
-    [Trait("Domain", "Validation")]
+    [Trait("Unit - Domain", "Validation")]
     [InlineData("12", 3)]
     public void Should_Throw_Error_When_Value_IsLess_Than_MinLength(string value, int minLength)
-    { 
+    {
         var action = () =>
             DomainValidation.MinLength(value, minLength, "Field");
 
@@ -86,7 +86,7 @@ public class DomainValidationTest
     }
 
     [Fact(DisplayName = nameof(Should_Not_Have_More_Characters_Than_MaxLength))]
-    [Trait("Domain", "Validation")]
+    [Trait("Unit - Domain", "Validation")]
     public void Should_Not_Have_More_Characters_Than_MaxLength()
     {
         var action = () =>
@@ -96,7 +96,7 @@ public class DomainValidationTest
     }
 
     [Theory(DisplayName = nameof(Should_Throw_Error_When_Value_IsGreater_Than_MaxLength))]
-    [Trait("Domain", "Validation")]
+    [Trait("Unit - Domain", "Validation")]
     [InlineData("123456", 5)]
     public void Should_Throw_Error_When_Value_IsGreater_Than_MaxLength(string value, int maxLength)
     {
