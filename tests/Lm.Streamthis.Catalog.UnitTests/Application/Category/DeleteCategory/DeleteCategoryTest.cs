@@ -16,23 +16,23 @@ public class DeleteCategoryTest(DeleteCategoryFixture fixture)
         var repositoryMock = fixture.GetMockRepository();
         var unitOfWork = fixture.GetMockUnitOfWork();
 
-        var validCategory = fixture.GetCategory();
+        var category = fixture.GetCategory();
 
         repositoryMock
             .Setup(x =>
-                x.Get(validCategory.Id, It.IsAny<CancellationToken>()))
-            .ReturnsAsync(validCategory);
+                x.Get(category.Id, It.IsAny<CancellationToken>()))
+            .ReturnsAsync(category);
 
-        var validRequest = new DeleteCategoryRequest(validCategory.Id);
+        var validRequest = new DeleteCategoryRequest(category.Id);
 
         var useCase = new UseCase.DeleteCategory(repositoryMock.Object, unitOfWork.Object);
         await useCase.Handle(validRequest, CancellationToken.None);
 
         repositoryMock.Verify(repository =>
-            repository.Get(validCategory.Id, It.IsAny<CancellationToken>()),
+            repository.Get(category.Id, It.IsAny<CancellationToken>()),
             Times.Once);
         repositoryMock.Verify(repository =>
-            repository.Delete(validCategory, It.IsAny<CancellationToken>()),
+            repository.Delete(category, It.IsAny<CancellationToken>()),
             Times.Once);
         unitOfWork.Verify(uow =>
             uow.Commit(It.IsAny<CancellationToken>()),
