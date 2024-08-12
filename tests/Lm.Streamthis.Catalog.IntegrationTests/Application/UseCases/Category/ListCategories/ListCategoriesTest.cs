@@ -40,4 +40,24 @@ public class ListCategoriesTest(ListCategoriesFixture fixture)
             item.CreatedAt.Should().Be(category.CreatedAt);
         });
     }
+
+    [Fact(DisplayName = nameof(Should_Return_Empty_List_When_Search_HasNoItems))]
+    [Trait("Integration - Application", "List Categories")]
+    public async void Should_Return_Empty_List_When_Search_HasNoItems()
+    {
+        var dbContext = fixture.CreateDbContext();
+
+        var repository = new CategoryRepository(dbContext);
+        var request = new ListCategoriesRequest();
+
+        var useCase = new UseCase.ListCategories(repository);
+        var response = await useCase.Handle(request, CancellationToken.None);
+
+        response.Should().NotBeNull();
+        response.Items.Should().NotBeNull();
+        response.Items.Should().HaveCount(0);
+        response.Total.Should().Be(0);
+        response.Page.Should().Be(request.Page);
+        response.PerPage.Should().Be(request.PerPage);
+    }
 }
