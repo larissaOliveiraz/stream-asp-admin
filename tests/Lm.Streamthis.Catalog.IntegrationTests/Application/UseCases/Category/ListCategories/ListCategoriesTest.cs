@@ -1,6 +1,9 @@
 ﻿using FluentAssertions;
+using Lm.Streamthis.Catalog.Application.UseCases.Category.Common;
 using Lm.Streamthis.Catalog.Application.UseCases.Category.ListCategories;
+using Lm.Streamthis.Catalog.Domain.SeedWork.SearchableRepository;
 using Lm.Streamthis.Catalog.Infra.Repositories;
+using DomainEntities = Lm.Streamthis.Catalog.Domain.Entities;
 using UseCase = Lm.Streamthis.Catalog.Application.UseCases.Category.ListCategories;
 
 namespace Lm.Streamthis.Catalog.IntegrationTests.Application.UseCases.Category.ListCategories;
@@ -134,5 +137,43 @@ public class ListCategoriesTest(ListCategoriesFixture fixture)
             item.IsActive.Should().Be(category.IsActive);
             item.CreatedAt.Should().Be(category.CreatedAt);
         });
+    }
+
+    [Theory(DisplayName = nameof(Should_Return_Search_Results_Ordered))]
+    [Trait("Integration - Application", "List Categories")]
+    [InlineData("name", SearchOrder.Asc)]
+    [InlineData("name", SearchOrder.Desc)]
+    [InlineData("id", SearchOrder.Asc)]
+    [InlineData("id", SearchOrder.Desc)]
+    [InlineData("createdAt", SearchOrder.Asc)]
+    [InlineData("createdAt", SearchOrder.Desc)]
+    [InlineData("", SearchOrder.Asc)]
+    public async void Should_Return_Search_Results_Ordered(
+        string orderBy, SearchOrder order)
+    {
+        var dbContext = fixture.CreateDbContext();
+        var categories = fixture.GetCategoriesList(20);
+
+        await dbContext.AddRangeAsync(categories);
+        await dbContext.SaveChangesAsync();
+
+        var repository = new CategoryRepository(dbContext);
+        var request = new ListCategoriesRequest(1, 20, "", orderBy, order);
+
+        var useCase = new UseCase.ListCategories(repository);
+        var response = await useCase.Handle(request, CancellationToken.None);
+
+        response.Should().NotBeNull();
+        var orderedResponse = new Dictionary<(string, SearchOrder), Action<IEnumerable<CategoryResponse>>>
+        {
+            { ("name", SearchOrder.Asc), categories => categories.Should().BeInAscendingOrder(x => x.Name) },
+            { ("name", SearchOrder.Desc), categories => categories.Should().BeInDescendingOrder(x => x.Name) },
+            { ("id", SearchOrder.Asc), categories => categories.Should().BeInAscendingOrder(x => x.Id) },
+            { ("id", SearchOrder.Desc), categories => categories.Should().BeInDescendingOrder(x => x.Id) },
+            { ("createdAt", SearchOrder.Asc), categories => categories.Should().BeInAscendingOrder(x => x.CreatedAt) },
+            { ("createdAt", SearchOrder.Desc), categories => categories.Should().BeInDescendingOrder(x => x.CreatedAt) },
+            { ("", SearchOrder.Asc), categories => categories.Should().BeInAscendingOrder(x => x.Name) }
+        };
+        orderedResponse[(orderBy, order)](response.Items);
     }
 }
