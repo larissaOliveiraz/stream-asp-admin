@@ -60,4 +60,40 @@ public class ListCategoriesTest(ListCategoriesFixture fixture)
         response.Page.Should().Be(request.Page);
         response.PerPage.Should().Be(request.PerPage);
     }
+
+    [Theory(DisplayName = nameof(Should_Return_Search_Results_Paginated))]
+    [Trait("Integration - Application", "List Categories")]
+    [InlineData(20, 1, 10, 10)]
+    [InlineData(20, 2, 10, 10)]
+    [InlineData(7, 2, 5, 2)]
+    [InlineData(7, 3, 5, 0)]
+    public async void Should_Return_Search_Results_Paginated(
+        int categoriesAmount, int currentPage, int perPage, int expectedItemsInCurrentPage)
+    {
+        var dbContext = fixture.CreateDbContext();
+        var categories = fixture.GetCategoriesList(categoriesAmount);
+
+        await dbContext.AddRangeAsync(categories);
+        await dbContext.SaveChangesAsync();
+
+        var repository = new CategoryRepository(dbContext);
+        var request = new ListCategoriesRequest(currentPage, perPage);
+
+        var useCase = new UseCase.ListCategories(repository);
+        var response = await useCase.Handle(request, CancellationToken.None);
+
+        response.Should().NotBeNull();
+        response.Items.Should().HaveCount(expectedItemsInCurrentPage);
+        response.Total.Should().Be(categoriesAmount);
+        response.Page.Should().Be(currentPage);
+        response.PerPage.Should().Be(perPage);
+        response.Items.ForEach(item =>
+        {
+            var category = categories.Find(x => x.Id == item.Id);
+            item.Name.Should().Be(category!.Name);
+            item.Description.Should().Be(category.Description);
+            item.IsActive.Should().Be(category.IsActive);
+            item.CreatedAt.Should().Be(category.CreatedAt);
+        });
+    }
 }
